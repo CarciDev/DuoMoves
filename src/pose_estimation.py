@@ -19,7 +19,9 @@ from hailo_rpi_common import (
     GStreamerApp,
     app_callback_class,
 )
-from flask import Flask, Response, render_template_string
+from flask import Flask, Response
+from flask_socketio import SocketIO, emit
+import base64
 import threading
 from collections import deque
 
@@ -229,51 +231,59 @@ class GStreamerPoseEstimationApp(GStreamerApp):
 
 # Flask app setup
 app = Flask(__name__)
+socketio = SocketIO(app)
 
-def generate_frames():
-    try:
-        while True:
-            sample = gstreamer_app.hailo_sink.try_pull_sample(Gst.SECOND)
+def generate_frame():
+    sample = gstreamer_app.hailo_sink.try_pull_sample(Gst.SECOND)
 
-            if sample is None:
-                continue
-
-            buffer = sample.get_buffer()
-            caps = sample.get_caps()
-            structure = caps.get_structure(0)
-            width = structure.get_value('width')
-            height = structure.get_value('height')
-            buffer_data = buffer.extract_dup(0, buffer.get_size())
-            numpy_array = np.frombuffer(buffer_data, dtype=np.uint8)
-
-            frame = numpy_array.reshape((height, width, 3))
-            _, frame_jpeg = cv2.imencode('.jpg', frame)
-            frame_bytes = frame_jpeg.tobytes()
-            
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-    except Exception as e:
-        print(f"Error generating frames: {e}")
+    sample = gstreamer_app.hailo_sink.try_pull_sample(Gst.SECOND)
+    if sample:
+        buffer = sample.get_buffer()
+        caps = sample.get_caps()
+        
+        structure = caps.get_structure(0)
+        width = structure.get_value('width')
+        height = structure.get_value('height')
+        buffer_data = buffer.extract_dup(0, buffer.get_size())
+        numpy_array = np.frombuffer(buffer_data, dtype=np.uint8)
+        
+        frame = numpy_array.reshape((height, width, 3))
+        
+        # Convert BGR to RGB if necessary (depends on your GStreamer pipeline)
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        
+        _, frame_jpeg = cv2.imencode('.jpg', frame)
+        frame_base64 = base64.b64encode(frame_jpeg).decode('utf-8')
+        return frame_base64
+    else:
+        print("No sample received within timeout period")
+        return None
 
 @app.route('/')
 def index():
-    return render_template_string("""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Video Stream</title>
-        </head>
-        <body>
-            <h1>Video Stream</h1>
-            <img src="{{ url_for('video_feed') }}" width="640" height="480">
-        </body>
-        </html>
-    """)
+    return '''<html>
+                <body>
+                    <h1>Raspberry Pi Camera WebSocket Stream</h1>
+                    <img id="stream" src="" alt="Video Stream">
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+                    <script type="text/javascript">
+                        var socket = io();
+                        socket.on('frame', function(data) {
+                            document.getElementById('stream').src = 'data:image/jpeg;base64,' + data;
+                        });
+                    </script>
+                </body>
+              </html>'''
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+def send_frames():
+    while True:
+        frame_base64 = generate_frame()
+        socketio.emit('frame', frame_base64)
+        time.sleep(0.03)
+
+@socketio.on('connect')
+def handle_connect():
+    socketio.start_background_task(send_frames)
 
 if __name__ == "__main__":
     user_data = user_app_callback_class()
