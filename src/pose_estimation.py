@@ -95,7 +95,7 @@ def app_callback(pad, info, user_data):
                     cv2.circle(frame, (right_eye_x, right_eye_y), 5, (0, 255, 0), -1)
                     # Note: using imshow will not work here, as the callback function is not running in the main thread
     
-    this.recent_detections = recent_detections
+    user_data.recent_detections = recent_detections
 
     if user_data.use_frame:
         # Convert the frame to BGR
