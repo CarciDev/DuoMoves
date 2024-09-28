@@ -189,8 +189,8 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         pipeline_string += "hmux. ! " + QUEUE("queue_hailo_python")
         pipeline_string += QUEUE("queue_user_callback")
         pipeline_string += f"identity name=identity_callback ! "
-        pipeline_string += QUEUE("queue_hailooverlay")
-        pipeline_string += f"hailooverlay ! "
+        # pipeline_string += QUEUE("queue_hailooverlay")
+        # pipeline_string += f"hailooverlay ! "
         pipeline_string += QUEUE("queue_videoconvert")
         pipeline_string += f"videoconvert n-threads=3 qos=false ! "
         pipeline_string += QUEUE("queue_hailo_display")
