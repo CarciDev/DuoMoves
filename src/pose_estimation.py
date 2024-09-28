@@ -225,6 +225,10 @@ def generate_frames(gstreamer_app):
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
+@app.route('/')
+def index():
+    return "Hello World!"
+
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(gstreamer_app),
@@ -237,5 +241,5 @@ if __name__ == "__main__":
     gstreamer_app = GStreamerPoseEstimationApp(args, user_data)
     gst_thread = threading.Thread(target=gstreamer_app.run)
     gst_thread.start()
-    
+
     app.run()
