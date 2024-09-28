@@ -182,15 +182,18 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         pipeline_string += QUEUE("bypass_queue", max_size_buffers=20) + "hmux.sink_0 "
         pipeline_string += "t. ! " + QUEUE("queue_hailonet")
         pipeline_string += "videoconvert n-threads=3 ! "
-        pipeline_string += f"hailonet hef-path={self.hef_path} batch-size={self.batch_size} force-writable=true ! "
-        pipeline_string += QUEUE("queue_hailofilter")
-        pipeline_string += f"hailofilter function-name={self.post_function_name} so-path={self.default_postprocess_so} qos=false ! "
+        # pipeline_string += f"hailonet hef-path={self.hef_path} batch-size={self.batch_size} force-writable=true ! "
+        # pipeline_string += QUEUE("queue_hailofilter")
+        # pipeline_string += f"hailofilter function-name={self.post_function_name} so-path={self.default_postprocess_so} qos=false ! "
         pipeline_string += QUEUE("queue_hmuc") + " hmux.sink_1 "
         pipeline_string += "hmux. ! " + QUEUE("queue_hailo_python")
         pipeline_string += QUEUE("queue_user_callback")
         pipeline_string += f"identity name=identity_callback ! "
+
+        # Comment out the following line to disable default overlay 
         # pipeline_string += QUEUE("queue_hailooverlay")
         # pipeline_string += f"hailooverlay ! "
+
         pipeline_string += QUEUE("queue_videoconvert")
         pipeline_string += f"videoconvert n-threads=3 qos=false ! "
         pipeline_string += QUEUE("queue_hailo_display")
