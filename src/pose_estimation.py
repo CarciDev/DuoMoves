@@ -269,7 +269,7 @@ def generate_frame():
         _, frame_jpeg = cv2.imencode('.jpg', frame)
         frame_base64 = base64.b64encode(frame_jpeg).decode('utf-8')
 
-        return = {
+        return {
             'frame': frame_base64,
             'detections': gstreamer_app.user_data.recent_detections
         }
