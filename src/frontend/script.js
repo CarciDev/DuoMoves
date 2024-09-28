@@ -1,5 +1,18 @@
-const canvas = document.getElementById("myCanvas");
+const startGameButton = document.getElementById('startGameButton');
+const startScreen = document.getElementById('startScreen');
+const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
+
+let p1Health = 100; // wait for kesh's code
+let p2Health = 100; // wait for kesh's code
+let timeLeft = 60;
+let gameInterval;
+let countdownInterval;
+
+// const healthBars = document.getElementById('healthBars');
+const timerDisplay = document.getElementById('timer');
+const gameOverMessage = document.getElementById('gameOverMessage');
+const winnerDisplay = document.getElementById('winner');
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -7,6 +20,48 @@ function resizeCanvas() {
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
+
+// start a game when button is clicked
+startGameButton.addEventListener('click', () => {
+    startScreen.style.display = 'none'; 
+    canvas.style.display = 'block'; 
+    startGame(); 
+});
+
+// game logic starts here
+function startGame() {
+    console.log("started game!");
+    // healthBars.style.display = 'flex';
+    timerDisplay.style.display = 'block';
+    gameOverMessage.style.display = 'none';
+    countdownInterval = setInterval(updateTimer, 1000); // Update timer every second
+    gameInterval = setInterval(animate, 100);
+    // updateHealthBars(); // wait for kesh's code
+    // animate();
+}
+
+function updateTimer() {
+    timeLeft--;
+    timerDisplay.innerText = 'TIME: ' + timeLeft;
+
+    if (timeLeft <= 0) {
+        clearInterval(countdownInterval); // countdown stops
+        endGame();
+    }
+}
+
+function endGame() {
+    timerDisplay.style.display = 'none'; 
+    gameOverMessage.style.display = 'block'; 
+
+    if (p1Health > p2Health) {
+        winnerDisplay.innerText = 'PLAYER 1 WINS.';
+    } else if (p2Health > p1Health) {
+        winnerDisplay.innerText = 'PLAYER 2 WINS.';
+    } else {
+        winnerDisplay.innerText = 'DRAW';
+    }
+}
 
 // class represent moving objects (and stationary object for rn before we get coords)
 class MovingObject {
@@ -34,12 +89,10 @@ class MovingObject {
             this.x += this.dx;
             this.y += this.dy;
 
-            // Check if the object has fallen off the screen
-            if (this.y > canvas.height) {
-                // Reset position to the top with a random x-coordinate
-                this.x = Math.random() * (canvas.width - this.width);
-                this.y = -this.height; // Start just above the top of the canvas
-            }
+        if (this.y > canvas.height) {
+            this.x = Math.random() * (canvas.width - this.width);
+            this.y = -this.height; 
+        }
 
             this.draw();
         }

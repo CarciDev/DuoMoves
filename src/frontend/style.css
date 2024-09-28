@@ -4,9 +4,15 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    font-family: Verdana;
     background-color: #000; /* Initial background color */
     animation: changeBackground 5s infinite alternate; /* Background color animation */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34; 
+    color: white; 
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    
 }
 
 canvas {
@@ -25,4 +31,91 @@ canvas {
     50% { background-color: orange; }
     75% { background-color: #ffff00; }
     100% { background-color: #ff00ff; }
+}
+
+#startScreen {
+    text-align: center;
+}
+
+#startScreen h1 {
+    font-size: 48px; /* Title size */
+}
+
+#startGameButton {
+    padding: 10px 20px;
+    font-size: 20px;
+    color: white; /* Button text color */
+    background-color: red; /* Button background color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Transition effect */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+
+}
+
+#startGameButton:hover {
+    background-color: orangered; /* Darker shade on hover */
+}
+
+canvas {
+    display: none; /* Hide canvas initially */
+}
+
+
+#healthBars {
+    position: fixed;
+    top: 20px; 
+    width: 100%; 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 0 20px; 
+    pointer-events: none; 
+}
+
+.health-bar {
+    width: 200px; 
+    height: 30px; 
+    background-color: #444; 
+    border-radius: 5px; 
+    position: relative; 
+}
+
+.health-fill {
+    height: 100%; 
+    width: 100%; 
+    background-color: grey; 
+    border-radius: 5px; 
+    transition: width 0.3s ease; 
+}
+
+.health-text {
+    position: absolute; 
+    width: 100%; 
+    text-align: center; 
+    line-height: 30px; 
+    color: white; 
+    font-weight: bold; 
+}
+
+#timer {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+#gameOverMessage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
 }

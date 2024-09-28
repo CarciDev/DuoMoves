@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DuoMoves</title>
-    <link rel="stylesheet" href="style.css">
+    <title>DuoMove</title>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
+    <div id="startScreen">
+        <h1>DUO MOVE</h1>
+        <button id="startGameButton">Start Game</button>
+    </div>
     <canvas id="myCanvas"></canvas>
+    <div id="timer" style="display: none;">TIME: 60</div> <!-- This line is added -->
+
     <script src="script.js"></script>
+    <div id="gameOverMessage" style="display: none;">GAME OVER<span id="winner"></span></div>
+
+    
 </body>
 </html>
