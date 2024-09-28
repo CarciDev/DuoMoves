@@ -70,6 +70,14 @@ def app_callback(pad, info, user_data):
         recent_detection = {}
         label = detection.get_label()
         bbox = detection.get_bbox()
+        recent_detection["bbox"] = {
+            "width": bbox.width(),
+            "height": bbox.height(),
+            "xmin": bbox.xmin(),
+            "ymin": bbox.ymin(),
+            "xmax": bbox.xmax(),
+            "ymax": bbox.ymax()
+        }
         confidence = detection.get_confidence()
         if label == "person":
             string_to_print += (f"Detection: {label} {confidence:.2f}\n")
