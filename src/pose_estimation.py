@@ -62,8 +62,12 @@ def app_callback(pad, info, user_data):
     roi = hailo.get_roi_from_buffer(buffer)
     detections = roi.get_objects_typed(hailo.HAILO_DETECTION)
 
+    recent_detections = []
+    keypoints = get_keypoints()
+
     # Parse the detections
     for detection in detections:
+        recent_detection = {}
         label = detection.get_label()
         bbox = detection.get_bbox()
         confidence = detection.get_confidence()
@@ -73,26 +77,31 @@ def app_callback(pad, info, user_data):
             landmarks = detection.get_objects_typed(hailo.HAILO_LANDMARKS)
             if len(landmarks) != 0:
                 points = landmarks[0].get_points()
-                left_eye = points[1]  # assuming 1 is the index for the left eye
-                right_eye = points[2]  # assuming 2 is the index for the right eye
-                # The landmarks are normalized to the bounding box, we also need to convert them to the frame size
-                left_eye_x = int((left_eye.x() * bbox.width() + bbox.xmin()) * width)
-                left_eye_y = int((left_eye.y() * bbox.height() + bbox.ymin()) * height)
-                right_eye_x = int((right_eye.x() * bbox.width() + bbox.xmin()) * width)
-                right_eye_y = int((right_eye.y() * bbox.height() + bbox.ymin()) * height)
-                string_to_print += (f" Left eye: x: {left_eye_x:.2f} y: {left_eye_y:.2f} Right eye: x: {right_eye_x:.2f} y: {right_eye_y:.2f}\n")
+
+                for key in keypoints:                 
+                    body_part = points[keypoints[key] - 1]
+                    body_part_x = int((body_part.x() * bbox.width() + bbox.xmin()) * width)
+                    body_part_y = int((body_part.y() * bbox.height() + bbox.ymin()) * height)
+                    recent_detection[key] = {
+                        "x": body_part_x,
+                        "y": body_part_y
+                    }
+                
+                recent_detections.append(recent_detection)
+
                 if user_data.use_frame:
                     # Add markers to the frame to show eye landmarks
                     cv2.circle(frame, (left_eye_x, left_eye_y), 5, (0, 255, 0), -1)
                     cv2.circle(frame, (right_eye_x, right_eye_y), 5, (0, 255, 0), -1)
                     # Note: using imshow will not work here, as the callback function is not running in the main thread
+    
+    this.recent_detections = recent_detections
 
     if user_data.use_frame:
         # Convert the frame to BGR
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         user_data.set_frame(frame)
 
-    # print(string_to_print)
     return Gst.PadProbeReturn.OK
 
 
@@ -259,7 +268,12 @@ def generate_frame():
         
         _, frame_jpeg = cv2.imencode('.jpg', frame)
         frame_base64 = base64.b64encode(frame_jpeg).decode('utf-8')
-        return frame_base64
+
+        return = {
+            'frame': frame_base64,
+            'detections': gstreamer_app.user_data.recent_detections
+        }
+        
     else:
         print("No sample received within timeout period")
         return None
@@ -274,7 +288,8 @@ def index():
                     <script type="text/javascript">
                         var socket = io();
                         socket.on('frame', function(data) {
-                            document.getElementById('stream').src = 'data:image/jpeg;base64,' + data;
+                            document.getElementById('stream').src = 'data:image/jpeg;base64,' + data.frame;
+                            console.log(data.detections);
                         });
                     </script>
                 </body>
