@@ -19,7 +19,7 @@ from hailo_rpi_common import (
     GStreamerApp,
     app_callback_class,
 )
-from flask import Flask, Response
+from flask import Flask, Response, send_from_directory
 from flask_socketio import SocketIO, emit
 import base64
 import threading
@@ -254,7 +254,8 @@ class GStreamerPoseEstimationApp(GStreamerApp):
     #         return self.frame_buffer[-1].copy() if self.frame_buffer else None
 
 # Flask app setup
-app = Flask(__name__)
+public_folder = './public'
+app = Flask(__name__, static_folder=public_folder)
 socketio = SocketIO(app)
 
 def generate_frame():
@@ -286,22 +287,13 @@ def generate_frame():
         print("No sample received within timeout period")
         return None
 
+@app.route('/<path:filename>')
+def serve_public(filename):
+    return send_from_directory(app.static_folder, filename)
+
 @app.route('/')
-def index():
-    return '''<html>
-                <body>
-                    <h1>Raspberry Pi Camera WebSocket Stream</h1>
-                    <img id="stream" src="" alt="Video Stream">
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-                    <script type="text/javascript">
-                        var socket = io();
-                        socket.on('frame', function(data) {
-                            document.getElementById('stream').src = 'data:image/jpeg;base64,' + data.frame;
-                            console.log(data.detections);
-                        });
-                    </script>
-                </body>
-              </html>'''
+def serve_index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 def send_frames():
     while True:
