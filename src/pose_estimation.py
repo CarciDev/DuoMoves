@@ -248,9 +248,7 @@ def generate_frame():
         numpy_array = np.frombuffer(buffer_data, dtype=np.uint8)
         
         frame = numpy_array.reshape((height, width, 3))
-        
-        # Convert BGR to RGB if necessary (depends on your GStreamer pipeline)
-        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         
         _, frame_jpeg = cv2.imencode('.jpg', frame)
         frame_base64 = base64.b64encode(frame_jpeg).decode('utf-8')
