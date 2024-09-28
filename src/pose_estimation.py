@@ -175,7 +175,7 @@ class GStreamerPoseEstimationApp(GStreamerApp):
     def get_pipeline_string(self):
         if self.source_type == "rpi":
             source_element = f"libcamerasrc name=src_0 ! "
-            source_element += f"video/x-raw, format={self.network_format}, width=1536, height=864 ! "
+            source_element += f"video/x-raw, format={self.network_format}, width=4608, height=2592 ! "
             source_element += QUEUE("queue_src_scale")
             source_element += f"videoscale ! "
             source_element += f"video/x-raw, format={self.network_format}, width={self.network_width}, height={self.network_height}, framerate=30/1 ! "
