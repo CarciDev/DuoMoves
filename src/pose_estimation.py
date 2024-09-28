@@ -18,7 +18,7 @@ from hailo_rpi_common import (
     GStreamerApp,
     app_callback_class,
 )
-from flask import Flask, Response
+from flask import Flask, Response, render_template_string
 import threading
 from collections import deque
 
