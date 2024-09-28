@@ -242,4 +242,4 @@ if __name__ == "__main__":
     gst_thread = threading.Thread(target=gstreamer_app.run)
     gst_thread.start()
 
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
