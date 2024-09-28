@@ -254,7 +254,7 @@ class GStreamerPoseEstimationApp(GStreamerApp):
     #         return self.frame_buffer[-1].copy() if self.frame_buffer else None
 
 # Flask app setup
-public_folder = './public'
+public_folder = os.path.join(os.path.dirname(__file__), 'frontend')
 app = Flask(__name__, static_folder=public_folder)
 socketio = SocketIO(app)
 
