@@ -182,6 +182,10 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         pipeline_string += QUEUE("bypass_queue", max_size_buffers=20) + "hmux.sink_0 "
         pipeline_string += "t. ! " + QUEUE("queue_hailonet")
         pipeline_string += "videoconvert n-threads=3 ! "
+
+        # Attempt to remove black bars
+        pipeline_string += f"videoscale ! video/x-raw,width={self.network_width},height={self.network_height},method=4 ! "
+
         pipeline_string += f"hailonet hef-path={self.hef_path} batch-size={self.batch_size} force-writable=true ! "
         pipeline_string += QUEUE("queue_hailofilter")
         pipeline_string += f"hailofilter function-name={self.post_function_name} so-path={self.default_postprocess_so} qos=false ! "
