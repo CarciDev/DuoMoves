@@ -1,18 +1,30 @@
 const startGameButton = document.getElementById('startGameButton');
+const playAgainButton = document.getElementById('playAgainButton');
+const exitGameButton = document.getElementById('exitGameButton');
 const startScreen = document.getElementById('startScreen');
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
-
-let p1Health = 100; // wait for kesh's code
-let p2Health = 100; // wait for kesh's code
-let timeLeft = 60;
-let gameInterval;
-let countdownInterval;
-
-// const healthBars = document.getElementById('healthBars');
 const timerDisplay = document.getElementById('timer');
 const gameOverMessage = document.getElementById('gameOverMessage');
 const winnerDisplay = document.getElementById('winner');
+// const healthBars = document.getElementById('healthBars');
+
+
+const countdownDisplay = document.createElement('div');
+countdownDisplay.style.position = 'absolute';
+countdownDisplay.style.top = '50%';
+countdownDisplay.style.left = '50%';
+countdownDisplay.style.transform = 'translate(-50%, -50%)';
+countdownDisplay.style.fontSize = '48px';
+countdownDisplay.style.color = 'white';
+countdownDisplay.style.display = 'none';
+document.body.appendChild(countdownDisplay);
+
+let p1Health = 5; 
+let p2Health = 5; 
+let timeLeft = 60;
+let gameInterval;
+let countdownInterval;
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -21,24 +33,34 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
+function startCountdown() {
+    let countdownValue = 3; 
+    countdownDisplay.style.display = 'block'; 
+
+    const countdown = setInterval(() => {
+        countdownDisplay.innerText = countdownValue; 
+        countdownValue--;
+
+        if (countdownValue < 0) {
+            clearInterval(countdown); 
+            countdownDisplay.style.display = 'none'; 
+            startGame(); 
+        }
+    }, 1000); 
+}
+
+function startGame() {
+    countdownInterval = setInterval(updateTimer, 1000); 
+    animate();
+}
+
 // start a game when button is clicked
 startGameButton.addEventListener('click', () => {
     startScreen.style.display = 'none'; 
     canvas.style.display = 'block'; 
-    startGame(); 
+    countdownInterval = setInterval(updateTimer, 1000); 
+    animate();
 });
-
-// game logic starts here
-function startGame() {
-    console.log("started game!");
-    // healthBars.style.display = 'flex';
-    timerDisplay.style.display = 'block';
-    gameOverMessage.style.display = 'none';
-    countdownInterval = setInterval(updateTimer, 1000); // Update timer every second
-    gameInterval = setInterval(animate, 100);
-    // updateHealthBars(); // wait for kesh's code
-    // animate();
-}
 
 function updateTimer() {
     timeLeft--;
@@ -46,26 +68,40 @@ function updateTimer() {
 
     if (timeLeft <= 0) {
         clearInterval(countdownInterval); // countdown stops
-        endGame();
+        endGame(time);
     }
 }
 
-function endGame() {
+function endGame(reason) {
+    cancelAnimationFrame(gameInterval);
+    
     timerDisplay.style.display = 'none'; 
-    gameOverMessage.style.display = 'block'; 
 
-    if (p1Health > p2Health) {
-        winnerDisplay.innerText = 'PLAYER 1 WINS.';
-    } else if (p2Health > p1Health) {
-        winnerDisplay.innerText = 'PLAYER 2 WINS.';
-    } else {
-        winnerDisplay.innerText = 'DRAW';
-    }
+    document.getElementById('gameControls').style.display = 'block';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'black'; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height); 
+
+        // if (reason === 'time') {
+        //     winnerDisplay.innerText = 'TIME UP!';
+        // } else {
+        //     if (p1Health > p2Health) {
+        //         winnerDisplay.innerText = 'PLAYER 1 WINS.';
+        //     } else if (p2Health > p1Health) {
+        //         winnerDisplay.innerText = 'PLAYER 2 WINS.';
+        //     } else {
+        //         winnerDisplay.innerText = 'DRAW';
+        //     }
+        // }
+    
+
+    // setTimeout(() => {
+    //     window.location.href = 'index.html';
+    // }, 5000);
 }
 
 // class represent moving objects (and stationary object for rn before we get coords)
 class MovingObject {
-
     constructor(x, y, width, height, dx, dy, color, isEnemy){
         this.x = x;
         this.y = y;
@@ -126,12 +162,15 @@ class Player {
     }
 
     loseHealth() {
-        this.health--;
+        this.health = Math.max(0, this.health - 1); 
         console.log(`${this.name} lost health! Current health: ${this.health}`);
+        if (this.health === 0) {
+            endGame(); 
+        }
     }
 
     gainHealth(){
-        this.health++;
+        this.health = Math.min(5, this.health + 1); 
         console.log(`${this.name} gained health! Current health: ${this.health}`);
     }
 }
@@ -148,37 +187,38 @@ function detectCollision(obj1, obj2) {
 
 // creating moving objects
 let movingObjects = [];
-// Bad guys
-for (let i = 0; i < 10; i++) {
-    const x = Math.random() * (canvas.width - 150);
-    const y = Math.random() * (canvas.height - 50);
-    const width = 50;
-    const height = 50;
-    const dx = 0; 
-    const dy = 2; 
-    const color = "red"; 
-    const isEnemy = true;
-    movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
+
+function createMovingObjects() {
+    // Bad guys
+    for (let i = 0; i < 10; i++) {
+        const x = Math.random() * (canvas.width - 150);
+        const y = Math.random() * (canvas.height - 50);
+        const width = 50;
+        const height = 50;
+        const dx = 0; 
+        const dy = 2; 
+        const color = "red"; 
+        const isEnemy = true;
+        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
+    }
+
+    // Good guys
+    for (let i = 0; i < 5; i++){
+        const x = Math.random() * (canvas.width - 150);
+        const y = Math.random() * (canvas.height - 50);
+        const width = 50;
+        const height = 50;
+        const dx = 0; 
+        const dy = 2; 
+        const color = "green"; 
+        const isEnemy = false;
+        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
+    }
 }
-
-// Good guys
-for (let i = 0; i < 5; i++){
-    const x = Math.random() * (canvas.width - 150);
-    const y = Math.random() * (canvas.height - 50);
-    const width = 50;
-    const height = 50;
-    const dx = 0; 
-    const dy = 2; 
-    const color = "green"; 
-    const isEnemy = false;
-    movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
-}
-
-
 
 // Player character
 // TODO: Add second player character once configured with camera
-const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "Kesh");
+const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
 let mouseX = player1.x;
 let mouseY = player1.y;
 
@@ -189,18 +229,14 @@ canvas.addEventListener('mousemove', (event) => {
     mouseY = event.clientY - rect.top;
 });
 
-// Animation loop
-function animate() {
-    // Clear the canvas before each frame
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+createMovingObjects();
 
-    // Draw the character
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     player1.update(mouseX, mouseY);
 
-    // Draw and update the moving objects, check for collisions
     movingObjects.forEach((obj) => {
         obj.update();
-        // Detect collision with both statues
         if (detectCollision(obj, player1)) {
             if (obj.isEnemy){
                 obj.isColliding = true;
@@ -218,12 +254,36 @@ function animate() {
         }
     });
 
-    // Remove the objects that are marked as deleted
     movingObjects = movingObjects.filter(obj => !obj.isDeleted);
+    gameInterval = requestAnimationFrame(animate);
 
-    // Request the next animation frame
-    requestAnimationFrame(animate);
 }
 
-// Start the animation
-animate();
+document.addEventListener('DOMContentLoaded', () => {
+    const playAgainButton = document.getElementById('playAgainButton');
+    const exitGameButton = document.getElementById('exitGameButton');
+
+    playAgainButton.addEventListener('click', () => {
+        resetGame(); 
+        animate();
+    });
+
+    exitGameButton.addEventListener('click', () => {
+        window.location.href = 'index.html'; 
+    });
+});
+
+function resetGame() {
+    clearInterval(countdownInterval); 
+    cancelAnimationFrame(gameInterval); 
+
+    p1Health = 5; 
+    p2Health = 5; 
+    timeLeft = 60; 
+    createMovingObjects();
+
+
+    document.getElementById('gameControls').style.display = 'none'; 
+    timerDisplay.style.display = 'block'; 
+    timerDisplay.innerText = 'TIME: ' + timeLeft; 
+}
