@@ -20,6 +20,7 @@ from hailo_rpi_common import (
 )
 from flask import Flask, Response
 import threading
+from collections import deque
 
 # -----------------------------------------------------------------------------------------------
 # User-defined class to be used in the callback function
@@ -142,8 +143,10 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         setproctitle.setproctitle("Hailo Pose Estimation App")
 
         self.create_pipeline()
-        self.latest_frame = None
+        self.frame_buffer = deque(maxlen=10)
         self.frame_lock = threading.Lock()
+        self.last_frame_time = 0
+        self.frame_interval = 1 / 30
 
     def get_pipeline_string(self):
         if self.source_type == "rpi":
@@ -195,6 +198,12 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         width = caps.get_structure(0).get_value("width")
         height = caps.get_structure(0).get_value("height")
         
+        current_time = time.time()
+        if current_time - self.last_frame_time < self.frame_interval:
+            return Gst.FlowReturn.OK
+
+        self.last_frame_time = current_time
+        
         buffer_data = buf.extract_dup(0, buf.get_size())
         frame = np.ndarray(
             (height, width, 3),
@@ -203,35 +212,55 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         )
         
         with self.frame_lock:
-            self.latest_frame = frame
+            self.frame_buffer.append(frame)
         
         return Gst.FlowReturn.OK
 
-
     def get_latest_frame(self):
         with self.frame_lock:
-            return self.latest_frame.copy() if self.latest_frame is not None else None
+            return self.frame_buffer[-1].copy() if self.frame_buffer else None
 
 # Flask app setup
 app = Flask(__name__)
 
-def generate_frames(gstreamer_app):
+def generate_frames(gstreamer_app, user_data):
+    last_frame_time = 0
+    frame_interval = 1 / 30
+
     while True:
+        current_time = time.time()
+        if current_time - last_frame_time < frame_interval:
+            time.sleep(0.001)
+            continue
+
         frame = gstreamer_app.get_latest_frame()
         if frame is not None:
-            # possible todo: implement drawing logic here
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+            ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            frame_bytes = buffer.tobytes()
+            
+            last_frame_time = current_time
+            
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
 @app.route('/')
 def index():
-    return "Hello World!"
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Video Stream</title>
+        </head>
+        <body>
+            <h1>Video Stream</h1>
+            <img src="{{ url_for('video_feed') }}" width="640" height="480">
+        </body>
+        </html>
+    """)
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(gstreamer_app),
+    return Response(generate_frames(gstreamer_app, user_data),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
@@ -242,4 +271,4 @@ if __name__ == "__main__":
     gst_thread = threading.Thread(target=gstreamer_app.run)
     gst_thread.start()
 
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, threaded=True)
