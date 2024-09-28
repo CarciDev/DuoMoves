@@ -1,10 +1,10 @@
 from flask import Flask, render_template
-from picamera import PiCamera
+from picamera2 import PiCamera2
 import io
 import time
 
 app = Flask(__name__)
-camera = PiCamera()
+camera = PiCamera2()
 
 @app.route('/')
 def index():
