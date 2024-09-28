@@ -184,7 +184,7 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         pipeline_string += "videoconvert n-threads=3 ! "
 
         # Attempt to remove black bars
-        pipeline_string += f"videoscale ! video/x-raw,width={self.network_width},height={self.network_height},method=4 ! "
+        # pipeline_string += f"videoscale ! video/x-raw,width={self.network_width},height={self.network_height},method=4 ! "
 
         pipeline_string += f"hailonet hef-path={self.hef_path} batch-size={self.batch_size} force-writable=true ! "
         pipeline_string += QUEUE("queue_hailofilter")
