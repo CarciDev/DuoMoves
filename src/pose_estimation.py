@@ -143,10 +143,13 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         setproctitle.setproctitle("Hailo Pose Estimation App")
 
         self.create_pipeline()
-        self.frame_buffer = deque(maxlen=10)
+        
+        self.frame_buffer = deque(maxlen=5)
         self.frame_lock = threading.Lock()
         self.last_frame_time = 0
-        self.frame_interval = 1 / 30
+        self.frame_interval = 1 / 10
+        self.stream_width = 320
+        self.stream_height = 240
 
     def get_pipeline_string(self):
         if self.source_type == "rpi":
@@ -211,6 +214,8 @@ class GStreamerPoseEstimationApp(GStreamerApp):
             dtype=np.uint8
         )
         
+        frame = cv2.resize(frame, (self.stream_width, self.stream_height))
+        
         with self.frame_lock:
             self.frame_buffer.append(frame)
         
@@ -225,17 +230,17 @@ app = Flask(__name__)
 
 def generate_frames(gstreamer_app, user_data):
     last_frame_time = 0
-    frame_interval = 1 / 30
+    frame_interval = 1 / 10
 
     while True:
         current_time = time.time()
         if current_time - last_frame_time < frame_interval:
-            time.sleep(0.001)
+            time.sleep(0.01)
             continue
 
         frame = gstreamer_app.get_latest_frame()
         if frame is not None:
-            ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
             frame_bytes = buffer.tobytes()
             
             last_frame_time = current_time
