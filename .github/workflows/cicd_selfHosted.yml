@@ -39,3 +39,4 @@ jobs:
           cd "$path"
           source setup_env.sh
           pip install -r requirements.txt
+          deactivate
