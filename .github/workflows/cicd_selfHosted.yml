@@ -35,6 +35,7 @@ jobs:
           path="/home/admin/HackerHomies2/actions-runner/repo/DuoMoves/DuoMoves/dist"
           mkdir -p "$path"
           cp -r /home/admin/HackerHomies2/HailoDependencies/hailo-rpi5-examples "$path"
+          cp -r /home/admin/HackerHomies2/actions-runner/repo/DuoMoves/DuoMoves/src/frontend "$path"/hailo-rpi5-examples/basic_pipelines/
           cp /home/admin/HackerHomies2/actions-runner/repo/DuoMoves/DuoMoves/src/pose_estimation.py "$path"/hailo-rpi5-examples/basic_pipelines/
           cd "$path/hailo-rpi5-examples"
           rm -rf venv_hailo_rpi5_examples
