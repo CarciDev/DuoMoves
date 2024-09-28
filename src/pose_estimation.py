@@ -1,7 +1,8 @@
 # Straight from https://github.com/hailo-ai/hailo-rpi5-examples
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import Gst, GLib
+gi.require_version('GstApp', '1.0')
+from gi.repository import Gst, GstApp, GLib
 import os
 import argparse
 import multiprocessing
@@ -143,13 +144,14 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         setproctitle.setproctitle("Hailo Pose Estimation App")
 
         self.create_pipeline()
-        
-        self.frame_buffer = deque(maxlen=5)
-        self.frame_lock = threading.Lock()
-        self.last_frame_time = 0
-        self.frame_interval = 1 / 10
-        self.stream_width = 320
-        self.stream_height = 240
+
+        self.hailo_sink = self.pipeline.get_by_name("hailo_sink")
+        # self.frame_buffer = deque(maxlen=5)
+        # self.frame_lock = threading.Lock()
+        # self.last_frame_time = 0
+        # self.frame_interval = 1 / 10
+        # self.stream_width = 320
+        # self.stream_height = 240
 
     def get_pipeline_string(self):
         if self.source_type == "rpi":
@@ -194,59 +196,64 @@ class GStreamerPoseEstimationApp(GStreamerApp):
         print(pipeline_string)
         return pipeline_string
 
-    def on_new_sample(self, sink):
-        sample = sink.emit("pull-sample")
-        buf = sample.get_buffer()
-        caps = sample.get_caps()
-        width = caps.get_structure(0).get_value("width")
-        height = caps.get_structure(0).get_value("height")
+    # def on_new_sample(self, sink):
+    #     sample = sink.emit("pull-sample")
+    #     buf = sample.get_buffer()
+    #     caps = sample.get_caps()
+    #     width = caps.get_structure(0).get_value("width")
+    #     height = caps.get_structure(0).get_value("height")
         
-        current_time = time.time()
-        if current_time - self.last_frame_time < self.frame_interval:
-            return Gst.FlowReturn.OK
+    #     current_time = time.time()
+    #     if current_time - self.last_frame_time < self.frame_interval:
+    #         return Gst.FlowReturn.OK
 
-        self.last_frame_time = current_time
+    #     self.last_frame_time = current_time
         
-        buffer_data = buf.extract_dup(0, buf.get_size())
-        frame = np.ndarray(
-            (height, width, 3),
-            buffer=buffer_data,
-            dtype=np.uint8
-        )
+    #     buffer_data = buf.extract_dup(0, buf.get_size())
+    #     frame = np.ndarray(
+    #         (height, width, 3),
+    #         buffer=buffer_data,
+    #         dtype=np.uint8
+    #     )
         
-        frame = cv2.resize(frame, (self.stream_width, self.stream_height))
+    #     frame = cv2.resize(frame, (self.stream_width, self.stream_height))
         
-        with self.frame_lock:
-            self.frame_buffer.append(frame)
+    #     with self.frame_lock:
+    #         self.frame_buffer.append(frame)
         
-        return Gst.FlowReturn.OK
+    #     return Gst.FlowReturn.OK
 
-    def get_latest_frame(self):
-        with self.frame_lock:
-            return self.frame_buffer[-1].copy() if self.frame_buffer else None
+    # def get_latest_frame(self):
+    #     with self.frame_lock:
+    #         return self.frame_buffer[-1].copy() if self.frame_buffer else None
 
 # Flask app setup
 app = Flask(__name__)
 
-def generate_frames(gstreamer_app, user_data):
-    last_frame_time = 0
-    frame_interval = 1 / 10
+def generate_frames():
+    try:
+        while True:
+            sample = gstreamer_app.hailo_sink.try_pull_sample(Gst.SECOND)
 
-    while True:
-        current_time = time.time()
-        if current_time - last_frame_time < frame_interval:
-            time.sleep(0.01)
-            continue
+            if sample is None:
+                continue
 
-        frame = gstreamer_app.get_latest_frame()
-        if frame is not None:
-            ret, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
-            frame_bytes = buffer.tobytes()
-            
-            last_frame_time = current_time
+            buffer = sample.get_buffer()
+            caps = sample.get_caps()
+            structure = caps.get_structure(0)
+            width = structure.get_value('width')
+            height = structure.get_value('height')
+            buffer_data = buffer.extract_dup(0, buffer.get_size())
+            numpy_array = np.frombuffer(buffer_data, dtype=np.uint8)
+
+            frame = numpy_array.reshape((height, width, 3))
+            _, frame_jpeg = cv2.imencode('.jpg', frame)
+            frame_bytes = frame_jpeg.tobytes()
             
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+    except Exception as e:
+        print(f"Error generating frames: {e}")
 
 @app.route('/')
 def index():
@@ -265,7 +272,7 @@ def index():
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(gstreamer_app, user_data),
+    return Response(generate_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
