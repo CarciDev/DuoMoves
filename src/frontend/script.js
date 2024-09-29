@@ -139,16 +139,43 @@ canvas.addEventListener('mousemove', (event) => {
 
 createMovingObjects();
 
-let isPaused = false;
+let isPaused = true;
+
 
 function animate() {
     // if two detections, unpause, else, pause
 
-    if (isPaused) gameInterval = requestAnimationFrame(animate);
+    if (detections === null || detections.length === 2) {
+        isPaused = false;
+    } else {
+        isPaused = true;
+    }
+    
+    if (isPaused) {
+        gameInterval = requestAnimationFrame(animate);
+        return;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // algo to detemrine which detection is player1 & player2
-    // udate both players with the right detection
+    try {
+       
+            const [detectionA, detectionB] = detections;
+
+            const playerAX = detectionA['nose'].x;
+            const playerBX = detectionB['nose'].x;
+
+            if (playerAX < playerBX) {
+                // player 1 is on the left side (smaller x-coordinate)
+                player1.update(detectionA['nose'].x, detectionA['nose'].y)
+                player2.update(detectionB['nose'].x, detectionB['nose'].y)
+            } else {
+                player1.update(detectionB['nose'].x, detectionB['nose'].y)
+                player2.update(detectionA['nose'].x, detectionA['nose'].y)
+            }
+    } catch (e) {
+        player1.update(mouseX, mouseY);
+    }
 
     try {
         let player1Detection = detections[0]
