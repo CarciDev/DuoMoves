@@ -7,12 +7,9 @@ export class Player {
 
     constructor(){
         this.health = 5; 
-        this.nose_x = null;
-        this.nose_y = null;
-        this.left_wrist_x = null;
-        this.left_wrist_y = null;
-        this.right_wrist_x = null;
-        this.right_wrist_y = null;
+        this.nose = null;
+        this.leftWrist = null;
+        this.rightWrist = null;
         this.isColliding = false;
         this.width = 50;
         this.height = 50;
@@ -20,19 +17,22 @@ export class Player {
 
     draw() {
         ctx.fillStyle = 'blue';
-        ctx.fillRect(this.left_wrist_x, this.left_wrist_y, this,width, this.height);
-        ctx.fillRect(this.right_wrist_x, this.right_wrist_y, this,width, this.height);
-        ctx.fillStyle = this.isColliding ? 'orange' : 'blue'; 
-        ctx.fillRect(this.nose_x, this.nose_y, this,width, this.height);
+        if (this.leftWrist) {
+            ctx.fillRect(this.leftWrist.x, this.leftWrist.y, this.width, this.height);
+        }
+        if (this.rightWrist) {
+            ctx.fillRect(this.rightWrist.x, this.rightWrist.y, this.width, this.height);
+        }
+        if (this.nose) {
+            ctx.fillStyle = this.isColliding ? 'orange' : 'blue'; 
+            ctx.fillRect(this.nose.x, this.nose.y, this.width, this.height);
+        }
     }
     
-    update(player1Detection){
-        this.nose_x = player1Detection['nose'].x;
-        this.nose_y = player1Detection['nose'].y;
-        this.left_wrist_x = player1Detection['left_wrist'].x;
-        this.left_wrist_y = player1Detection['left_wrist'].y;
-        this.right_wrist_x = player1Detection['right_wrist'].x;
-        this.right_wrist_y = player1Detection['right_wrist'].y;
+    update({nose = null, left_wrist = null, right_wrist = null}) {
+        this.nose = nose;
+        this.leftWrist = left_wrist;
+        this.rightWrist = right_wrist;
         this.draw();
     }
 

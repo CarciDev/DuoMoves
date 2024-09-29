@@ -128,10 +128,11 @@ function createMovingObjects() {
 }
 
 const player1 = new Player();
+const player2 = new Player();
 let mouseX = 1;
 let mouseY = 1;
 
-canvas.addEventListener('mousemove', (event) => {
+window.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = event.clientX - rect.left;
     mouseY = event.clientY - rect.top;
@@ -167,20 +168,20 @@ function animate() {
 
             if (playerAX < playerBX) {
                 // player 1 is on the left side (smaller x-coordinate)
-                player1.update(detectionA['nose'].x, detectionA['nose'].y)
-                player2.update(detectionB['nose'].x, detectionB['nose'].y)
+                player1.update(detectionA)
+                player2.update(detectionB)
             } else {
-                player1.update(detectionB['nose'].x, detectionB['nose'].y)
-                player2.update(detectionA['nose'].x, detectionA['nose'].y)
+                player1.update(detectionB)
+                player2.update(detectionA)
             }
     } catch (e) {
-        player1.update(mouseX, mouseY);
+        player1.update({ nose: { x: mouseX, y: mouseY } })
     }
 
     try {
         let player1Detection = detections[0]
         player1.update(player1Detection);
-        // player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
+        player2.update(player1Detection);
     } catch (e) {
         console.log("no detections")
     }
