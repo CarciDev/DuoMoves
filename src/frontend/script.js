@@ -10,8 +10,6 @@ const ctx = canvas.getContext("2d");
 const timerDisplay = document.getElementById('timer');
 const gameOverMessage = document.getElementById('gameOverMessage');
 const winnerDisplay = document.getElementById('winner');
-// const healthBars = document.getElementById('healthBars');
-
 
 const countdownDisplay = document.createElement('div');
 countdownDisplay.style.position = 'absolute';
