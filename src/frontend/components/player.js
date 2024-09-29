@@ -51,11 +51,11 @@ export class Player {
 
   update({ nose = null, left_wrist = null, right_wrist = null }) {
     if (nose) {
-      const normalizedNose = getNormalizedCanvasCoordinates(nose.x, nose.y)
+      const normalizedNose = normalizeVisionCoordinates(nose.x, nose.y)
       this.nose = new BodyPart(normalizedNose)
     }
     if (left_wrist) {
-      const leftWristNormalized = getNormalizedCanvasCoordinates(
+      const leftWristNormalized = normalizeVisionCoordinates(
         left_wrist.x,
         left_wrist.y
       )
@@ -64,7 +64,7 @@ export class Player {
       // this.leftWrist = new BodyPart(left_wrist)
     }
     if (right_wrist) {
-      const rightWristNormalized = getNormalizedCanvasCoordinates(
+      const rightWristNormalized = normalizeVisionCoordinates(
         right_wrist.x,
         right_wrist.y
       )
@@ -110,5 +110,15 @@ export const getNormalizedCanvasCoordinates = (x, y) => {
   return {
     x: (x - rect.left) * scaleX,
     y: (y - rect.top) * scaleY,
+  }
+}
+
+export const normalizeVisionCoordinates = (x, y) => {
+  const scaleX = canvas.width / 640
+  const scaleY = canvas.height / 640
+
+  return {
+    x: x * scaleX,
+    y: y * scaleY,
   }
 }
