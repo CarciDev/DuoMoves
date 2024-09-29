@@ -116,13 +116,13 @@ function createMovingObjects() {
   ]
 
   // Bad guys
-  for (let i = 0; i < 12 - movingObjects.length; i++) {
+  for (let i = 0; i < 7 - movingObjects.length; i++) {
     const x = Math.random() * (canvas.width - 150)
     const y = Math.random() * (canvas.height - 50)
     const width = 25
     const height = 25
     const dx = Math.random() * 2 - 1
-    const dy = 5
+    const dy = 3.75
     const color = 'red'
     const isEnemy = true
     const movementType =
