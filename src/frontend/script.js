@@ -249,9 +249,8 @@ function resetGame() {
   clearInterval(countdownInterval)
   cancelAnimationFrame(gameInterval)
 
-  p1Health = 5
-  p2Health = 5
   timeLeft = 60
+  movingObjects = []
   createMovingObjects()
 
   document.getElementById('gameControls').style.display = 'none'
