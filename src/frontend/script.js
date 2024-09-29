@@ -167,7 +167,7 @@ window.addEventListener('mousemove', (event) => {
     // mouseY = (event.clientY - rect.top) * scaleY
     
   const { x, y } = getNormalizedCanvasCoordinates(event.clientX, event.clientY)
-  console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
+  // console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
   mouseX = x
   mouseY = y
 })
@@ -192,6 +192,12 @@ function animate() {
     const playerAX = detectionA['nose'].x
     const playerBX = detectionB['nose'].x
 
+    getNormalizedCanvasCoordinates(detectionA['nose'].x, detectionA['nose'].y)
+    getNormalizedCanvasCoordinates(detectionB['nose'].x, detectionB['nose'].y)
+
+    console.log("playerA:", detectionA['nose'].x)
+    console.log("playerB", detectionB['nose'].x)
+    
     if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
       player1.update(detectionA)
@@ -201,9 +207,8 @@ function animate() {
       player2.update(detectionA)
     }
 
-    console.log("player1 left wrist:", player1.leftWrist.x, player1.leftWrist.y);
-    console.log("player2 left wrist:", player2.leftWrist.x, player2.leftWrist.y);
-
+    // console.log("player1 left wrist:", player1.leftWrist.x, player1.leftWrist.y);
+    // console.log("player2 left wrist:", player2.leftWrist.x, player2.leftWrist.y);
 
   } catch (e) {
     player1.update({ nose: { x: mouseX, y: mouseY } })
