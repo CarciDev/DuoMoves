@@ -51,17 +51,13 @@ export class Player {
 
   update({ nose = null, left_wrist = null, right_wrist = null }) {
     if (nose) {
-      this.nose = new BodyPart(getNormalizedCanvasCoordinates(nose.x, nose.y))
+      this.nose = new BodyPart(nose.x, nose.y)
     }
     if (left_wrist) {
-      this.leftWrist = new BodyPart(
-        getNormalizedCanvasCoordinates(left_wrist.x, left_wrist.y)
-      )
+      this.leftWrist = new BodyPart(left_wrist.x, left_wrist.y)
     }
     if (right_wrist) {
-      this.rightWrist = new BodyPart(
-        getNormalizedCanvasCoordinates(right_wrist.x, right_wrist.y)
-      )
+      this.rightWrist = new BodyPart(right_wrist.x, right_wrist.y)
     }
     this.draw()
   }
