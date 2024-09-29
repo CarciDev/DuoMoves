@@ -25,6 +25,7 @@ document.body.appendChild(countdownDisplay)
 let timeLeft = 60
 let gameInterval
 let countdownInterval
+let isPaused = true
 
 function resizeCanvas() {
   canvas.width = window.innerWidth
@@ -168,8 +169,6 @@ window.addEventListener('mousemove', (event) => {
 
 createMovingObjects()
 
-let isPaused = true
-
 function animate() {
   if (detections === null || detections.length === 2) {
     isPaused = false
@@ -202,13 +201,13 @@ function animate() {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
 
-//   try {
-//     let player1Detection = detections[0]
-//     player1.update(player1Detection)
-//     player2.update(player1Detection)
-//   } catch (e) {
-//     console.log('no detections')
-//   }
+  //   try {
+  //     let player1Detection = detections[0]
+  //     player1.update(player1Detection)
+  //     player2.update(player1Detection)
+  //   } catch (e) {
+  //     console.log('no detections')
+  //   }
 
   movingObjects.forEach((obj) => {
     obj.update()
@@ -251,9 +250,8 @@ function resetGame() {
   clearInterval(countdownInterval)
   cancelAnimationFrame(gameInterval)
 
-  p1Health = 5
-  p2Health = 5
   timeLeft = 60
+  movingObjects = []
   createMovingObjects()
 
   document.getElementById('gameControls').style.display = 'none'
