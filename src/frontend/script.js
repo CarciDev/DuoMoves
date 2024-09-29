@@ -40,17 +40,16 @@ startGameButton.addEventListener('click', () => {
   startScreen.style.display = 'none'
   canvas.style.display = 'block'
   countdownInterval = setInterval(updateTimer, 1000)
-  animate()
+  createMovingObjects()
 })
 
 function updateTimer() {
-    if (isPaused) {
-        return;
-    } 
+  if (isPaused) {
+    return
+  }
   timeLeft--
   timerDisplay.innerText = 'TIME: ' + timeLeft
 
-  
   if (timeLeft <= 0) {
     clearInterval(countdownInterval) // countdown stops
     endGame()
@@ -167,8 +166,6 @@ window.addEventListener('mousemove', (event) => {
   mouseY = (event.clientY - rect.top) * scaleY
 })
 
-createMovingObjects()
-
 function animate() {
   if (detections === null || detections.length === 2) {
     isPaused = false
@@ -231,6 +228,8 @@ function animate() {
   movingObjects = movingObjects.filter((obj) => !obj.isDeleted)
   gameInterval = requestAnimationFrame(animate)
 }
+
+animate()
 
 document.addEventListener('DOMContentLoaded', () => {
   const playAgainButton = document.getElementById('playAgainButton')
