@@ -71,6 +71,7 @@ body {
   color: white;
   font-weight: bold;
   pointer-events: none;
+  margin-top: 2rem;
 }
 
 .health {
