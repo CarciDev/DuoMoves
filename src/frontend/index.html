@@ -80,7 +80,7 @@
 
         for (i in detections) {
           for (key in detections[i]) {
-            detections[i].x = detections[i].x - window.innerWidth
+            detections[i].x = window.innerWidth - detections[i].x
           }
         }
         detections = data.detections
