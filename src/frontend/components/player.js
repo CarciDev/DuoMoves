@@ -40,7 +40,7 @@ export class Player {
         this.rightWrist.x,
         this.rightWrist.y,
         this.rightWrist.width,
-        this.leftWrist.height
+        this.rightWrist.height
       )
     }
     if (this.nose) {
