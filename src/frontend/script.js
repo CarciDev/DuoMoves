@@ -217,7 +217,7 @@ function animate() {
       if (detectCollision(obj, player.nose)) {
         obj.isColliding = true
         player.isColliding = true
-        player.loseHealth(obj)
+        obj.isEnemy ? player.loseHealth(obj) : player.gainHealth(obj);
         obj.isDeleted = true
       } else if (
         detectCollision(obj, player.leftWrist) ||
@@ -239,7 +239,6 @@ animate()
 document.addEventListener('DOMContentLoaded', () => {
   const playAgainButton = document.getElementById('playAgainButton')
   const exitGameButton = document.getElementById('exitGameButton')
-
   playAgainButton.addEventListener('click', () => {
     resetGame()
     animate()
@@ -259,10 +258,14 @@ function resetGame() {
   }
 
   timeLeft = 60
+  isPaused = false 
   movingObjects = []
   createMovingObjects()
 
   document.getElementById('gameControls').style.display = 'none'
   timerDisplay.style.display = 'block'
   timerDisplay.innerText = 'TIME: ' + timeLeft
+
+  isPaused = false // Unpause the game
+  countdownInterval = setInterval(updateTimer, 1000) // Restart the timer
 }

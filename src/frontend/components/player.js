@@ -74,7 +74,9 @@ export class Player {
 
   gainHealth() {
     this.health = Math.min(5, this.health + 1)
-    console.log(`${this.name} gained health! Current health: ${this.health}`)
+    document.querySelector(`.health-${this.id}`).style.width = `${
+      this.health * 20
+    }%`
   }
 }
 
