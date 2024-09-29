@@ -181,19 +181,19 @@ function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   try {
-    const [detectionA, detectionB] = detections
+    // const [detectionA, detectionB] = detections
 
-    const playerAX = detectionA['nose'].x
-    const playerBX = detectionB['nose'].x
+    // const playerAX = detectionA['nose'].x
+    // const playerBX = detectionB['nose'].x
 
-    if (playerAX < playerBX) {
+    // if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
-      player1.update(detectionA)
-      player2.update(detectionB)
-    } else {
-      player1.update(detectionB)
-      player2.update(detectionA)
-    }
+      player1.update(detections[0])
+      player2.update(detections[1])
+    // } else {
+    //   player1.update(detectionB)
+    //   player2.update(detectionA)
+    // }
   } catch (e) {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
