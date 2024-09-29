@@ -3,6 +3,7 @@ import { endGame } from "../script.js"
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
 
+// todo make player class better with noses n stuff
 export class Player {
     constructor(x, y, width, height, name) {
         this.health = 5; 
@@ -19,6 +20,7 @@ export class Player {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
+    // todo update all body parts of the player
     update(x, y) {
         this.x = x - this.width / 2;
         this.y = y - this.height / 2;

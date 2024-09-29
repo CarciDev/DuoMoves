@@ -131,13 +131,6 @@ const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
 let mouseX = player1.x;
 let mouseY = player1.y;
 
-// try {
-//     let player1Detection = detections[0]
-//     player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
-// } catch (e) {
-//     console.log("no detections")
-// }
-
 canvas.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = event.clientX - rect.left;
@@ -146,8 +139,17 @@ canvas.addEventListener('mousemove', (event) => {
 
 createMovingObjects();
 
+isPaused = false;
+
 function animate() {
+    // if two detections, unpause, else, pause
+
+    if (isPaused) gameInterval = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // algo to detemrine which detection is player1 & player2
+    // udate both players with the right detection
+
     try {
         let player1Detection = detections[0]
         player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
