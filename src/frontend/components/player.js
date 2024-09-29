@@ -1,4 +1,9 @@
-class Player {
+import { endGame } from "../script.js"
+
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext("2d");
+
+export class Player {
     constructor(x, y, width, height, name) {
         this.health = 5; 
         this.x = x;

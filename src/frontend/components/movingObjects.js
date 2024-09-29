@@ -1,5 +1,7 @@
-// class represent moving objects (and stationary object for rn before we get coords)
-class MovingObject {
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext("2d");
+
+export class MovingObject {
     constructor(x, y, width, height, dx, dy, color, isEnemy){
         this.x = x;
         this.y = y;

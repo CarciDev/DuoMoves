@@ -1,3 +1,6 @@
+import { MovingObject } from './components/movingObjects.js';
+import {Player} from './components/player.js'
+
 const startGameButton = document.getElementById('startGameButton');
 const playAgainButton = document.getElementById('playAgainButton');
 const exitGameButton = document.getElementById('exitGameButton');
@@ -33,27 +36,6 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-function startCountdown() {
-    let countdownValue = 3; 
-    countdownDisplay.style.display = 'block'; 
-
-    const countdown = setInterval(() => {
-        countdownDisplay.innerText = countdownValue; 
-        countdownValue--;
-
-        if (countdownValue < 0) {
-            clearInterval(countdown); 
-            countdownDisplay.style.display = 'none'; 
-            startGame(); 
-        }
-    }, 1000); 
-}
-
-function startGame() {
-    countdownInterval = setInterval(updateTimer, 1000); 
-    animate();
-}
-
 // start a game when button is clicked
 startGameButton.addEventListener('click', () => {
     startScreen.style.display = 'none'; 
@@ -72,7 +54,7 @@ function updateTimer() {
     }
 }
 
-function endGame(reason) {
+export function endGame(reason) {
     cancelAnimationFrame(gameInterval);
     
     timerDisplay.style.display = 'none'; 
@@ -99,7 +81,6 @@ function endGame(reason) {
     //     window.location.href = 'index.html';
     // }, 5000);
 }
-
 
 // Collision detection function
 function detectCollision(obj1, obj2) {
@@ -148,7 +129,6 @@ const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
 let mouseX = player1.x;
 let mouseY = player1.y;
 
-// Mouse move event listener to update player's position
 canvas.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = event.clientX - rect.left;
@@ -208,8 +188,8 @@ function resetGame() {
     timeLeft = 60; 
     createMovingObjects();
 
-
     document.getElementById('gameControls').style.display = 'none'; 
     timerDisplay.style.display = 'block'; 
     timerDisplay.innerText = 'TIME: ' + timeLeft; 
+
 }
