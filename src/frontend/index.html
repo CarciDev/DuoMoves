@@ -7,23 +7,32 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="timer">TIME: 60</div>
-    <div
+    <header
       style="
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+        flex-direction: column;
         align-items: center;
-        gap: 1rem;
+        visibility: hidden;
       "
     >
-      <div class="health health-1">
-        <div class="health-fill"></div>
+      <div id="timer">TIME: 60</div>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          gap: 1rem;
+        "
+      >
+        <div class="health health-1">
+          <div class="health-fill"></div>
+        </div>
+        <div class="health health-2">
+          <div class="health-fill"></div>
+        </div>
       </div>
-      <div class="health health-2">
-        <div class="health-fill"></div>
-      </div>
-    </div>
+    </header>
     <div id="startScreen">
       <h1>DUO MOVE</h1>
       <button id="startGameButton">START GAME</button>
