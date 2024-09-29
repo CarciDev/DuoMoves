@@ -26,6 +26,7 @@ let timeLeft = 60
 let gameInterval
 let countdownInterval
 let isPaused = true
+let shouldBeSpawning = false
 
 function resizeCanvas() {
   canvas.width = window.innerWidth
@@ -40,6 +41,7 @@ startGameButton.addEventListener('click', () => {
   startScreen.style.display = 'none'
   canvas.style.display = 'block'
   isPaused = false
+  shouldBeSpawning = true
   countdownInterval = setInterval(updateTimer, 1000)
   createMovingObjects()
 })
@@ -75,7 +77,7 @@ export function endGame() {
     winnerMessage.innerText = 'DRAW'
   }
 
-  clearInterval(countdownInterval);
+  clearInterval(countdownInterval)
 
   // setTimeout(() => {
   //     window.location.href = 'index.html';
@@ -102,7 +104,7 @@ function createMovingObjects() {
   const movementTypes = ['straight', 'angle', 'parabola']
 
   // Bad guys
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 12 - movingObjects.length; i++) {
     const x = Math.random() * (canvas.width - 150)
     const y = Math.random() * (canvas.height - 50)
     const width = 50
@@ -129,7 +131,8 @@ function createMovingObjects() {
   }
 
   // Good guys
-  for (let i = 0; i < 3; i++) {
+  const goodGuysCount = movingObjects.filter((obj) => !obj.isEnemy).length
+  for (let i = 0; i < 3 - goodGuysCount; i++) {
     const x = Math.random() * (canvas.width - 150)
     const y = Math.random() * (canvas.height - 50)
     const width = 50
@@ -212,7 +215,7 @@ function animate() {
     // console.log("player1 left wrist:", player1.leftWrist.x, player1.leftWrist.y);
     // console.log("player2 left wrist:", player2.leftWrist.x, player2.leftWrist.y);
   } catch (e) {
-    player1.update({ nose: { x: mouseX, y: mouseY } })
+    player1.update({ left_wrist: { x: mouseX, y: mouseY } })
   }
 
   //   try {
@@ -222,6 +225,10 @@ function animate() {
   //   } catch (e) {
   //     console.log('no detections')
   //   }
+
+  if (shouldBeSpawning) {
+    createMovingObjects()
+  }
 
   movingObjects.forEach((obj) => {
     obj.update()
@@ -237,6 +244,15 @@ function animate() {
       ) {
         player.isColliding = false
         obj.isColliding = false
+        obj.isDeleted = true
+      }
+      // if object is not on canvas, delete it:
+      if (
+        obj.x + obj.width < 0 ||
+        obj.x > canvas.width ||
+        obj.y + obj.height < 0 ||
+        obj.y > canvas.height
+      ) {
         obj.isDeleted = true
       }
     }
@@ -278,6 +294,6 @@ function resetGame() {
   timerDisplay.style.display = 'block'
   timerDisplay.innerText = 'TIME: ' + timeLeft
 
-  isPaused = false 
-  countdownInterval = setInterval(updateTimer, 1000) 
+  isPaused = false
+  countdownInterval = setInterval(updateTimer, 1000)
 }

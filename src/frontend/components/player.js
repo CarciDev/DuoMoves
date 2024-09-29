@@ -96,16 +96,9 @@ export const getNormalizedCanvasCoordinates = (x, y) => {
   const rect = canvas.getBoundingClientRect()
   const scaleX = canvas.width / rect.width
   const scaleY = canvas.height / rect.height
-  console.log('scale x:', scaleX)
-  console.log('scale Y:', scaleY)
-  console.log('rect left:', rect.left)
-  console.log('rect top:', rect.top)
 
   // console.log("x and y normalized:", x, y)
   // console.log("x and y normalized:", x, y)
-
-  console.log('x and y normalized:', x, y)
-  console.log('x and y normalized:', x, y)
 
   return {
     x: (x - rect.left) * scaleX,
