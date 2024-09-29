@@ -34,9 +34,9 @@
           </div>
         </div>
         <div class="health health-2">
-          <div class="health-fill">    
+          <div class="health-fill">
             <span class="health-label">Player 2</span>
-        </div>
+          </div>
         </div>
       </div>
     </header>
@@ -82,9 +82,9 @@
         document.getElementById('stream').src =
           'data:image/jpeg;base64,' + data.frame
 
-        for (i in detections) {
-          for (key in detections[i]) {
-            detections[i].x = window.innerWidth - detections[i].x
+        for (i in data.detections) {
+          for (key in data.detections[i]) {
+            data.detections[i].x = window.innerWidth - data.detections[i].x
           }
         }
         detections = data.detections
