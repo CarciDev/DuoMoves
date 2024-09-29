@@ -7,12 +7,21 @@ body {
   overflow: hidden;
   background-color: #000;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #282c34;
   color: white;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+}
+
+.game-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 #startScreen {
@@ -32,22 +41,12 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
 }
 
 #startGameButton:hover {
   background-color: orangered;
-}
-
-#healthBars {
-  position: fixed;
-  top: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  pointer-events: none;
 }
 
 .health-bar {
@@ -76,23 +75,31 @@ body {
 }
 
 #timer {
-  position: fixed;
-  top: 60px;
-  width: 100%;
-  text-align: center;
   font-size: 24px;
   color: white;
   font-weight: bold;
   pointer-events: none;
+  margin-top: 2rem;
+}
+
+.health {
+  width: 300px;
+  height: 30px;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 20px;
+}
+
+.health-fill {
+  height: 100%;
+  background-color: green;
+  width: 100%;
+  transition: width 0.3s ease;
 }
 
 #gameControls {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 100;
 }
 
 #gameOverMessage,
@@ -115,13 +122,13 @@ body {
 }
 
 canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    z-index: 2; /* Ensure canvas is above the image */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 2; /* Ensure canvas is above the image */
 }
 
 #stream {

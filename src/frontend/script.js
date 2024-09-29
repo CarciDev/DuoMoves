@@ -7,11 +7,10 @@ const exitGameButton = document.getElementById('exitGameButton');
 const startScreen = document.getElementById('startScreen');
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
+const gameHeader = document.querySelector('header');
 const timerDisplay = document.getElementById('timer');
 const gameOverMessage = document.getElementById('gameOverMessage');
 const winnerDisplay = document.getElementById('winner');
-// const healthBars = document.getElementById('healthBars');
-
 
 const countdownDisplay = document.createElement('div');
 countdownDisplay.style.position = 'absolute';
@@ -38,6 +37,7 @@ window.addEventListener('resize', resizeCanvas);
 
 // start a game when button is clicked
 startGameButton.addEventListener('click', () => {
+    gameHeader.style.visibility = '';
     startScreen.style.display = 'none'; 
     canvas.style.display = 'block'; 
     countdownInterval = setInterval(updateTimer, 1000); 
