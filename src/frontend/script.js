@@ -39,6 +39,7 @@ startGameButton.addEventListener('click', () => {
   gameHeader.style.visibility = ''
   startScreen.style.display = 'none'
   canvas.style.display = 'block'
+  isPaused = false 
   countdownInterval = setInterval(updateTimer, 1000)
   createMovingObjects()
 })
@@ -70,6 +71,7 @@ export function endGame() {
     winnerMessage.innerText = 'PLAYER 1 WINS.'
   } else if (player2.health > player1.health) {
     winnerMessage.innerText = 'PLAYER 2 WINS.'
+    console.log("Here");
   } else {
     winnerMessage.innerText = 'DRAW'
   }
@@ -244,13 +246,17 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   exitGameButton.addEventListener('click', () => {
-    window.location.href = 'index.html'
-  })
+    window.location.href = 'thankYou.html'
+  }) 
 })
 
 function resetGame() {
   clearInterval(countdownInterval)
   cancelAnimationFrame(gameInterval)
+
+  for (let player of [player1, player2]) {
+    player.health = 5;
+  }
 
   timeLeft = 60
   movingObjects = []

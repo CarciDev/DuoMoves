@@ -49,6 +49,14 @@ body {
   background-color: purple;
 }
 
+#thankYouScreen {
+  text-align: center;
+}
+
+#thankYouScreen h1 {
+  font-size: 48px;
+}
+
 .health-bar {
   width: 200px;
   height: 30px;
