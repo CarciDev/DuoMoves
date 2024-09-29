@@ -39,7 +39,7 @@ startGameButton.addEventListener('click', () => {
   gameHeader.style.visibility = ''
   startScreen.style.display = 'none'
   canvas.style.display = 'block'
-  isPaused = false 
+  isPaused = false
   countdownInterval = setInterval(updateTimer, 1000)
   createMovingObjects()
 })
@@ -160,12 +160,12 @@ let mouseX = 1
 let mouseY = 1
 
 window.addEventListener('mousemove', (event) => {
-    const rect = canvas.getBoundingClientRect()
-    // const scaleX = canvas.width / rect.width
-    // const scaleY = canvas.height / rect.height
-    // mouseX = (event.clientX - rect.left) * scaleX
-    // mouseY = (event.clientY - rect.top) * scaleY
-    
+  const rect = canvas.getBoundingClientRect()
+  // const scaleX = canvas.width / rect.width
+  // const scaleY = canvas.height / rect.height
+  // mouseX = (event.clientX - rect.left) * scaleX
+  // mouseY = (event.clientY - rect.top) * scaleY
+
   const { x, y } = getNormalizedCanvasCoordinates(event.clientX, event.clientY)
   // console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
   mouseX = x
@@ -195,9 +195,9 @@ function animate() {
     getNormalizedCanvasCoordinates(detectionA['nose'].x, detectionA['nose'].y)
     getNormalizedCanvasCoordinates(detectionB['nose'].x, detectionB['nose'].y)
 
-    console.log("playerA:", detectionA['nose'].x)
-    console.log("playerB", detectionB['nose'].x)
-    
+    console.log('playerA:', detectionA['nose'].x)
+    console.log('playerB', detectionB['nose'].x)
+
     if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
       player1.update(detectionA)
@@ -209,7 +209,6 @@ function animate() {
 
     // console.log("player1 left wrist:", player1.leftWrist.x, player1.leftWrist.y);
     // console.log("player2 left wrist:", player2.leftWrist.x, player2.leftWrist.y);
-
   } catch (e) {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
@@ -228,7 +227,7 @@ function animate() {
       if (detectCollision(obj, player.nose)) {
         obj.isColliding = true
         player.isColliding = true
-        obj.isEnemy ? player.loseHealth(obj) : player.gainHealth(obj);
+        obj.isEnemy ? player.loseHealth(obj) : player.gainHealth(obj)
         obj.isDeleted = true
       } else if (
         detectCollision(obj, player.leftWrist) ||
@@ -257,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   exitGameButton.addEventListener('click', () => {
     window.location.href = 'thankYou.html'
-  }) 
+  })
 })
 
 function resetGame() {
@@ -265,11 +264,11 @@ function resetGame() {
   cancelAnimationFrame(gameInterval)
 
   for (let player of [player1, player2]) {
-    player.health = 5;
+    player.setHealth(5)
   }
 
   timeLeft = 60
-  isPaused = false 
+  isPaused = false
   movingObjects = []
   createMovingObjects()
 

@@ -63,20 +63,19 @@ export class Player {
   }
 
   loseHealth() {
-    this.health = Math.max(0, this.health - 1)
-    document.querySelector(`.health-${this.id}`).style.width = `${
-      this.health * 20
-    }%`
+    this.setHealth(Math.max(0, this.health - 1))
     if (this.health === 0) {
       endGame()
     }
   }
 
   gainHealth() {
-    this.health = Math.min(5, this.health + 1)
-    document.querySelector(`.health-${this.id}`).style.width = `${
-      this.health * 20
-    }%`
+    this.setHealth(Math.min(5, this.health + 1))
+  }
+
+  setHealth(value) {
+    this.health = value
+    document.querySelector(`.health-${this.id}`).style.width = `${value * 20}%`
   }
 }
 
