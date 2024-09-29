@@ -12,8 +12,7 @@ body {
   align-items: center;
   background-color: #282c34;
   color: white;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-    'Lucida Sans', Arial, sans-serif;
+  font-family: 'game', sans-serif;
 }
 
 .game-screen {
@@ -41,8 +40,8 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
-    'Lucida Sans', Arial, sans-serif;
+  font-family: 'game', sans-serif;
+
 }
 
 #startGameButton:hover {
@@ -51,6 +50,8 @@ body {
 
 #thankYouScreen {
   text-align: center;
+  font-family: 'game', sans-serif;
+
 }
 
 #thankYouScreen h1 {
@@ -115,6 +116,8 @@ body {
   font-size: 48px;
   color: white;
   margin-bottom: 20px;
+  font-family: 'game', sans-serif;
+
 }
 
 #playAgainButton,
@@ -122,6 +125,7 @@ body {
   font-size: 36px;
   color: green;
   margin: 10px 0;
+  font-family: 'game', sans-serif;
 }
 
 .container {
@@ -136,7 +140,7 @@ canvas {
   width: 100%;
   height: 100%;
   background-color: transparent;
-  z-index: 2; /* Ensure canvas is above the image */
+  z-index: 2;
 }
 
 #stream {
@@ -154,4 +158,10 @@ canvas {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+@font-face {
+  font-family: 'game';
+  src: url('./fonts/gameovercre1.ttf') format('truetype');
+  /* src: url('./fonts/pokemon_fire_red.ttf') format('truetype'); */
+
 }
