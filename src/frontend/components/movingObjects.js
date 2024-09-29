@@ -2,7 +2,7 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
 
 export class MovingObject {
-    constructor(x, y, width, height, dx, dy, color, isEnemy){
+    constructor(x, y, width, height, dx, dy, color, isEnemy, movementType){
         this.x = x;
         this.y = y;
         this.width = width;
@@ -13,6 +13,8 @@ export class MovingObject {
         this.isColliding = false;
         this.isEnemy = isEnemy;
         this.isDeleted = false;
+        this.movementType = movementType;
+        this.startY = y;
     }
 
     draw() {
@@ -22,13 +24,25 @@ export class MovingObject {
 
     update() {
         if (!this.isDeleted){
-            this.x += this.dx;
-            this.y += this.dy;
+            switch (this.movementType) {
+                case 'straight':
+                    this.y += this.dy;
+                    break;
+                case 'angle':
+                    this.x += this.dx;
+                    this.y += this.dy;
+                    break;
+                case 'parabola':
+                    this.y = this.startY - 0.01 * Math.pow(this.x - canvas.width / 2, 2);
+                    this.x += this.dx;
+                    break;
+            }
 
-        if (this.y > canvas.height) {
-            this.x = Math.random() * (canvas.width - this.width);
-            this.y = -this.height; 
-        }
+            if (this.y > canvas.height || this.x > canvas.width || this.x < 0) {
+                this.x = Math.random() * (canvas.width - this.width);
+                this.y = -this.height; 
+                this.startY = this.y; // Reset startY for parabolic movement
+            }
 
             this.draw();
         }

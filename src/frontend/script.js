@@ -96,35 +96,37 @@ function detectCollision(obj1, obj2) {
 let movingObjects = [];
 
 function createMovingObjects() {
+    const movementTypes = ['straight', 'angle', 'parabola'];
+
     // Bad guys
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
         const x = Math.random() * (canvas.width - 150);
         const y = Math.random() * (canvas.height - 50);
         const width = 50;
         const height = 50;
-        const dx = 0; 
+        const dx = Math.random() * 2 - 1;
         const dy = 2; 
         const color = "red"; 
         const isEnemy = true;
-        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
+        const movementType = movementTypes[Math.floor(Math.random() * movementTypes.length)];
+        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy, movementType));
     }
 
     // Good guys
-    for (let i = 0; i < 5; i++){
+    for (let i = 0; i < 3; i++){
         const x = Math.random() * (canvas.width - 150);
         const y = Math.random() * (canvas.height - 50);
         const width = 50;
         const height = 50;
-        const dx = 0; 
+        const dx = Math.random() * 2 - 1; // Random dx for angle movement
         const dy = 2; 
         const color = "green"; 
         const isEnemy = false;
-        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy));
+        const movementType = movementTypes[Math.floor(Math.random() * movementTypes.length)];
+        movingObjects.push(new MovingObject(x, y, width, height, dx, dy, color, isEnemy, movementType));
     }
 }
 
-// Player character
-// TODO: Add second player character once configured with camera
 const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
 let mouseX = player1.x;
 let mouseY = player1.y;
