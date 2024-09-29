@@ -161,11 +161,11 @@ let mouseX = 1
 let mouseY = 1
 
 window.addEventListener('mousemove', (event) => {
-  //   const rect = canvas.getBoundingClientRect()
-  //   const scaleX = canvas.width / rect.width
-  //   const scaleY = canvas.height / rect.height
-  //   mouseX = (event.clientX - rect.left) * scaleX
-  //   mouseY = (event.clientY - rect.top) * scaleY
+    const rect = canvas.getBoundingClientRect()
+    // const scaleX = canvas.width / rect.width
+    // const scaleY = canvas.height / rect.height
+    // mouseX = (event.clientX - rect.left) * scaleX
+    // mouseY = (event.clientY - rect.top) * scaleY
   const { x, y } = getNormalizedCanvasCoordinates(event.clientX, event.clientY)
   mouseX = x
   mouseY = y
@@ -186,15 +186,15 @@ function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
   try {
-    // const [detectionA, detectionB] = detections
+    const [detectionA, detectionB] = detections
 
     const playerAX = detectionA['nose'].x
     const playerBX = detectionB['nose'].x
 
     if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
-      player1.update(detections[0])
-      player2.update(detections[1])
+      player1.update(detectionA)
+      player2.update(detectionB)
     } else {
       player1.update(detectionB)
       player2.update(detectionA)
