@@ -139,7 +139,7 @@ canvas.addEventListener('mousemove', (event) => {
 
 createMovingObjects();
 
-isPaused = false;
+let isPaused = false;
 
 function animate() {
     // if two detections, unpause, else, pause
