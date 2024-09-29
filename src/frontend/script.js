@@ -58,14 +58,14 @@ function updateTimer() {
 }
 
 export function endGame() {
-  cancelAnimationFrame(gameInterval)
+  movingObjects = movingObjects.filter((obj) => !obj.isDeleted)
+  movingObjects = movingObjects.filter(() => false)
+  requestAnimationFrame(animate)
 
+  cancelAnimationFrame(gameInterval)
   timerDisplay.style.display = 'none'
 
   document.getElementById('gameControls').style.display = 'block'
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  ctx.fillStyle = 'black'
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   if (player1.health > player2.health) {
     winnerMessage.innerText = 'PLAYER 1 WINS.'
@@ -74,6 +74,8 @@ export function endGame() {
   } else {
     winnerMessage.innerText = 'DRAW'
   }
+
+  clearInterval(countdownInterval);
 
   // setTimeout(() => {
   //     window.location.href = 'index.html';
@@ -276,6 +278,6 @@ function resetGame() {
   timerDisplay.style.display = 'block'
   timerDisplay.innerText = 'TIME: ' + timeLeft
 
-  isPaused = false // Unpause the game
-  countdownInterval = setInterval(updateTimer, 1000) // Restart the timer
+  isPaused = false 
+  countdownInterval = setInterval(updateTimer, 1000) 
 }
