@@ -78,11 +78,11 @@
         document.getElementById('stream').src =
           'data:image/jpeg;base64,' + data.frame
 
-        for (i in detections) {
-          for (key in detections[i]) {
-            detections[i].x = detections[i].x - window.innerWidth
-          }
-        }
+        // for (i in detections) {
+        //   for (key in detections[i]) {
+        //     detections[i].x = detections[i].x - window.innerWidth
+        //   }
+        // }
         detections = data.detections
       })
     </script>
