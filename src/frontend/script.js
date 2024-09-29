@@ -122,7 +122,7 @@ function createMovingObjects() {
     const width = 25
     const height = 25
     const dx = Math.random() * 2 - 1
-    const dy = 3.75
+    const dy = 4
     const color = 'red'
     const isEnemy = true
     const movementType =

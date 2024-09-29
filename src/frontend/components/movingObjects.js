@@ -50,6 +50,39 @@ export class MovingObject {
     }
   }
 
+  draw() {
+    ctx.fillStyle = this.isColliding ? 'red' : this.color
+    ctx.fillRect(this.x, this.y, this.width, this.height)
+  }
+
+  update() {
+    if (!this.isDeleted) {
+      switch (this.movementType) {
+        case 'straight':
+          this.y += this.dy
+          break
+        case 'angle':
+          this.x += this.dx
+          this.y += this.dy
+          break
+        case 'parabola':
+          const intensity = 0.3
+          this.y =
+            this.startY - intensity * Math.pow(this.x - canvas.width / 2, 2)
+          this.x += this.dx
+          break
+      }
+
+      if (this.y > canvas.height || this.x > canvas.width || this.x < 0) {
+        this.x = Math.random() * (canvas.width - this.width)
+        this.y = -this.height
+        this.startY = this.y // Reset startY for parabolic movement
+      }
+
+      this.draw()
+    }
+  }
+
   delete() {
     this.isDeleted = true
   }
