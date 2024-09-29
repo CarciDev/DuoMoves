@@ -51,13 +51,17 @@ export class Player {
 
   update({ nose = null, left_wrist = null, right_wrist = null }) {
     if (nose) {
-      this.nose = new BodyPart(nose)
+      this.nose = new BodyPart(getNormalizedCanvasCoordinates(nose.x, nose.y))
     }
     if (left_wrist) {
-      this.leftWrist = new BodyPart(left_wrist)
+      this.leftWrist = new BodyPart(
+        getNormalizedCanvasCoordinates(left_wrist.x, left_wrist.y)
+      )
     }
     if (right_wrist) {
-      this.rightWrist = new BodyPart(right_wrist)
+      this.rightWrist = new BodyPart(
+        getNormalizedCanvasCoordinates(right_wrist.x, right_wrist.y)
+      )
     }
     this.draw()
   }
@@ -75,5 +79,15 @@ export class Player {
   gainHealth() {
     this.health = Math.min(5, this.health + 1)
     console.log(`${this.name} gained health! Current health: ${this.health}`)
+  }
+}
+
+export const getNormalizedCanvasCoordinates = (x, y) => {
+  const rect = canvas.getBoundingClientRect()
+  const scaleX = canvas.width / rect.width
+  const scaleY = canvas.height / rect.height
+  return {
+    x: (x - rect.left) * scaleX,
+    y: (y - rect.top) * scaleY,
   }
 }

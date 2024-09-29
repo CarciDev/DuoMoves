@@ -1,5 +1,5 @@
 import { MovingObject } from './components/movingObjects.js'
-import { Player } from './components/player.js'
+import { Player, getNormalizedCanvasCoordinates } from './components/player.js'
 
 const startGameButton = document.getElementById('startGameButton')
 const playAgainButton = document.getElementById('playAgainButton')
@@ -159,11 +159,14 @@ let mouseX = 1
 let mouseY = 1
 
 window.addEventListener('mousemove', (event) => {
-  const rect = canvas.getBoundingClientRect()
-  const scaleX = canvas.width / rect.width
-  const scaleY = canvas.height / rect.height
-  mouseX = (event.clientX - rect.left) * scaleX
-  mouseY = (event.clientY - rect.top) * scaleY
+  //   const rect = canvas.getBoundingClientRect()
+  //   const scaleX = canvas.width / rect.width
+  //   const scaleY = canvas.height / rect.height
+  //   mouseX = (event.clientX - rect.left) * scaleX
+  //   mouseY = (event.clientY - rect.top) * scaleY
+  const { x, y } = getNormalizedCanvasCoordinates(event.clientX, event.clientY)
+  mouseX = x
+  mouseY = y
 })
 
 function animate() {
@@ -183,17 +186,17 @@ function animate() {
   try {
     // const [detectionA, detectionB] = detections
 
-    // const playerAX = detectionA['nose'].x
-    // const playerBX = detectionB['nose'].x
+    const playerAX = detectionA['nose'].x
+    const playerBX = detectionB['nose'].x
 
-    // if (playerAX < playerBX) {
+    if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
       player1.update(detections[0])
       player2.update(detections[1])
-    // } else {
-    //   player1.update(detectionB)
-    //   player2.update(detectionA)
-    // }
+    } else {
+      player1.update(detectionB)
+      player2.update(detectionA)
+    }
   } catch (e) {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
