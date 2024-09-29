@@ -1,2 +1,3 @@
-# DuoMoves
+# DuoMove
 HackerHomies - Hack The Hill
+
