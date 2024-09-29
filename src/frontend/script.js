@@ -79,6 +79,9 @@ export function endGame() {
 
   clearInterval(countdownInterval)
 
+  isPaused = true
+  shouldBeSpawning = false
+
   // setTimeout(() => {
   //     window.location.href = 'index.html';
   // }, 5000);
@@ -298,6 +301,7 @@ function resetGame() {
 
   timeLeft = 60
   isPaused = false
+  shouldBeSpawning = true
   movingObjects = []
   createMovingObjects()
 
@@ -305,6 +309,5 @@ function resetGame() {
   timerDisplay.style.display = 'block'
   timerDisplay.innerText = 'TIME: ' + timeLeft
 
-  isPaused = false
   countdownInterval = setInterval(updateTimer, 1000)
 }
