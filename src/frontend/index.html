@@ -7,30 +7,42 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div
+    <header
       style="
         display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
+        flex-direction: column;
         align-items: center;
-        gap: 2rem;
-        margin-bottom: 2rem;
+        visibility: hidden;
       "
     >
-      <div class="health health-1">
-        <div class="health-fill"></div>
-      </div>
       <div id="timer">TIME: 60</div>
-      <div class="health health-2">
-        <div class="health-fill"></div>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          align-items: center;
+          gap: 1rem;
+        "
+      >
+        <div class="health health-1">
+          <div class="health-fill"></div>
+        </div>
+        <div class="health health-2">
+          <div class="health-fill"></div>
+        </div>
       </div>
-    </div>
-    <div id="startScreen">
+    </header>
+    <div id="startScreen" class="game-screen">
       <h1>DUO MOVE</h1>
       <button id="startGameButton">START GAME</button>
     </div>
 
-    <div id="gameControls" style="display: none; text-align: center">
+    <div
+      id="gameControls"
+      class="game-screen"
+      style="display: none; text-align: center"
+    >
       <div id="gameOverMessage">GAME OVER.</div>
       <div id="winnerMessage"></div>
       <br />
