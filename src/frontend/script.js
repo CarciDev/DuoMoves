@@ -218,18 +218,15 @@ function animate() {
     obj.update()
     for (let player of [player1, player2]) {
       if (detectCollision(obj, player.nose)) {
-        if (obj.isEnemy) {
-          obj.isColliding = true
-          player.isColliding = true
-          player.loseHealth(obj)
-        } else {
-          player.isColliding = true
-          player.gainHealth()
-        }
+        obj.isColliding = true
+        player.isColliding = true
+        player.loseHealth(obj)
         obj.isDeleted = true
-      } else {
-        obj.isColliding = false
-        player.isColliding = false
+      } else if (
+        detectCollision(obj, player.leftWrist) ||
+        detectCollision(obj, player.rightWrist)
+      ) {
+        obj.isDeleted = true
       }
     }
   })
