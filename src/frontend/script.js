@@ -131,6 +131,13 @@ const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
 let mouseX = player1.x;
 let mouseY = player1.y;
 
+// try {
+//     let player1Detection = detections[0]
+//     player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
+// } catch (e) {
+//     console.log("no detections")
+// }
+
 canvas.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = event.clientX - rect.left;
@@ -141,10 +148,9 @@ createMovingObjects();
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     try {
         let player1Detection = detections[0]
-        player1.update(player1Detection['right_hand'])
+        player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
     } catch (e) {
         console.log("no detections")
     }
