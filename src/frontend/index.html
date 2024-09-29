@@ -87,7 +87,7 @@
 
         for (i in data.detections) {
           for (key in data.detections[i]) {
-            data.detections[i].x = window.innerWidth - data.detections[i].x
+            data.detections[i][key].x = 640 - data.detections[i][key].x
           }
         }
         detections = data.detections
