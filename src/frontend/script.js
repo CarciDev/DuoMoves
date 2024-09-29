@@ -22,8 +22,6 @@ countdownDisplay.style.color = 'white'
 countdownDisplay.style.display = 'none'
 document.body.appendChild(countdownDisplay)
 
-let p1Health = 5
-let p2Health = 5
 let timeLeft = 60
 let gameInterval
 let countdownInterval
@@ -202,13 +200,13 @@ function animate() {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
 
-  try {
-    let player1Detection = detections[0]
-    player1.update(player1Detection)
-    player2.update(player1Detection)
-  } catch (e) {
-    console.log('no detections')
-  }
+//   try {
+//     let player1Detection = detections[0]
+//     player1.update(player1Detection)
+//     player2.update(player1Detection)
+//   } catch (e) {
+//     console.log('no detections')
+//   }
 
   movingObjects.forEach((obj) => {
     obj.update()
@@ -222,6 +220,8 @@ function animate() {
         detectCollision(obj, player.leftWrist) ||
         detectCollision(obj, player.rightWrist)
       ) {
+        player.isColliding = false
+        obj.isColliding = false
         obj.isDeleted = true
       }
     }

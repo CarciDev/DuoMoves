@@ -46,7 +46,7 @@ body {
 }
 
 #startGameButton:hover {
-  background-color: orangered;
+  background-color: purple;
 }
 
 .health-bar {
