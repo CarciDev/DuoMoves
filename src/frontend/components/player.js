@@ -6,8 +6,8 @@ const ctx = canvas.getContext('2d')
 class BodyPart {
   static size = 50
   constructor({ x, y }) {
-    this.x = getNormalizedCanvasCoordinates(x - BodyPart.size / 2)
-    this.y = getNormalizedCanvasCoordinates(y - BodyPart.size / 2)
+    this.x = x - BodyPart.size / 2
+    this.y = y - BodyPart.size / 2
     this.width = BodyPart.size
     this.height = BodyPart.size
   }
@@ -51,13 +51,21 @@ export class Player {
 
   update({ nose = null, left_wrist = null, right_wrist = null }) {
     if (nose) {
-      this.nose = new BodyPart(nose)
+      const normalizedNose = getNormalizedCanvasCoordinates(nose.x, nose.y);
+      this.nose = new BodyPart(normalizedNose)
+
     }
     if (left_wrist) {
-      this.leftWrist = new BodyPart(left_wrist)
+      const leftWristNormalized = getNormalizedCanvasCoordinates(left_wrist.x, left_wrist.y);
+      this.leftWrist = new BodyPart(leftWristNormalized)
+
+      // this.leftWrist = new BodyPart(left_wrist)
     }
     if (right_wrist) {
-      this.rightWrist = new BodyPart(right_wrist)
+      const rightWristNormalized = getNormalizedCanvasCoordinates(right_wrist.x, right_wrist.y);
+      this.rightWrist = new BodyPart(rightWristNormalized)
+
+      // this.rightWrist = new BodyPart(right_wrist)
     }
     this.draw()
   }
@@ -89,8 +97,8 @@ export const getNormalizedCanvasCoordinates = (x, y) => {
   console.log("rect left:", rect.left)
   console.log("rect top:", rect.top)
 
-  console.log("x and y normalized:", x, y)
-  console.log("x and y normalized:", x, y)
+  // console.log("x and y normalized:", x, y)
+  // console.log("x and y normalized:", x, y)
 
 
   return {

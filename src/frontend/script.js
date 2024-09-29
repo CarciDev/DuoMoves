@@ -197,7 +197,7 @@ function animate() {
 
     // console.log("playerA:", detectionA['nose'].x)
     // console.log("playerB", detectionB['nose'].x)
-
+    
     if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
       player1.update(detectionA)
