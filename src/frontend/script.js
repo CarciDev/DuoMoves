@@ -99,20 +99,20 @@ function detectCollision(obj1, obj2) {
 let movingObjects = []
 
 function createMovingObjects() {
-  const movementTypes = ['straight', 'angle', 'parabola']
+  const movementTypes = ['straight', 'angle', 'parabola'];
+  const weightedMovementTypes = ['straight', 'angle', 'angle', 'angle','parabola' , 'parabola', 'parabola'];
 
   // Bad guys
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 14; i++) {
     const x = Math.random() * (canvas.width - 150)
     const y = Math.random() * (canvas.height - 50)
-    const width = 50
-    const height = 50
+    const width = 25
+    const height = 25
     const dx = Math.random() * 2 - 1
-    const dy = 2
+    const dy = 5
     const color = 'red'
     const isEnemy = true
-    const movementType =
-      movementTypes[Math.floor(Math.random() * movementTypes.length)]
+    const movementType = weightedMovementTypes[Math.floor(Math.random() * weightedMovementTypes.length)];
     movingObjects.push(
       new MovingObject(
         x,
