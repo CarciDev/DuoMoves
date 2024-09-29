@@ -19,9 +19,9 @@ export class Player {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
-    update(mouseX, mouseY) {
-        this.x = mouseX - this.width / 2;
-        this.y = mouseY - this.height / 2;
+    update(x, y) {
+        this.x = x - this.width / 2;
+        this.y = y - this.height / 2;
         this.draw();
     }
 

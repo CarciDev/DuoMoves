@@ -141,7 +141,9 @@ createMovingObjects();
 
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    player1.update(mouseX, mouseY);
+
+    let player1Detection = detections[0]
+    player1.update(player1Detection['right_hand'])
 
     movingObjects.forEach((obj) => {
         obj.update();
