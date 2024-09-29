@@ -43,9 +43,13 @@ startGameButton.addEventListener('click', () => {
 })
 
 function updateTimer() {
+    if (isPaused) {
+        return;
+    } 
   timeLeft--
   timerDisplay.innerText = 'TIME: ' + timeLeft
 
+  
   if (timeLeft <= 0) {
     clearInterval(countdownInterval) // countdown stops
     endGame()
@@ -167,8 +171,6 @@ createMovingObjects()
 let isPaused = true
 
 function animate() {
-  // if two detections, unpause, else, pause
-
   if (detections === null || detections.length === 2) {
     isPaused = false
   } else {

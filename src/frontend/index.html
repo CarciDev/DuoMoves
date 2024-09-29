@@ -64,13 +64,19 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script type="text/javascript">
-      let detections = null
-      var socket = io()
-      socket.on('frame', function (data) {
-        document.getElementById('stream').src =
-          'data:image/jpeg;base64,' + data.frame
-        detections = data.detections
-      })
+      let detections = null;
+      var socket = io();
+      socket.on("frame", function (data) {
+        document.getElementById("stream").src =
+          "data:image/jpeg;base64," + data.frame;
+
+        for (i in detections) {
+          for (key in detections[i]) {
+            detections[i].x = detections[i].x - window.innerWidth;
+          }
+        }
+        detections = data.detections;
+      });
     </script>
   </body>
 </html>
