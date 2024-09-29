@@ -4,7 +4,7 @@ const canvas = document.getElementById('myCanvas')
 const ctx = canvas.getContext('2d')
 
 class BodyPart {
-  static size = 50
+  static size = 5
   constructor({ x, y }) {
     this.x = x - BodyPart.size / 2
     this.y = y - BodyPart.size / 2
