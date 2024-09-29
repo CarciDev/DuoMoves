@@ -51,13 +51,13 @@ export class Player {
 
   update({ nose = null, left_wrist = null, right_wrist = null }) {
     if (nose) {
-      this.nose = new BodyPart(nose.x, nose.y)
+      this.nose = new BodyPart(nose)
     }
     if (left_wrist) {
-      this.leftWrist = new BodyPart(left_wrist.x, left_wrist.y)
+      this.leftWrist = new BodyPart(left_wrist)
     }
     if (right_wrist) {
-      this.rightWrist = new BodyPart(right_wrist.x, right_wrist.y)
+      this.rightWrist = new BodyPart(right_wrist)
     }
     this.draw()
   }
