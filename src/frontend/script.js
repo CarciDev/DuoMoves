@@ -195,8 +195,8 @@ function animate() {
     getNormalizedCanvasCoordinates(detectionA['nose'].x, detectionA['nose'].y)
     getNormalizedCanvasCoordinates(detectionB['nose'].x, detectionB['nose'].y)
 
-    console.log('playerA:', detectionA['nose'].x)
-    console.log('playerB', detectionB['nose'].x)
+    // console.log("playerA:", detectionA['nose'].x)
+    // console.log("playerB", detectionB['nose'].x)
 
     if (playerAX < playerBX) {
       // player 1 is on the left side (smaller x-coordinate)
