@@ -4,7 +4,7 @@ const canvas = document.getElementById('myCanvas')
 const ctx = canvas.getContext('2d')
 
 class BodyPart {
-  static size = 5
+  static size = 50
   constructor({ x, y }) {
     this.x = x - BodyPart.size / 2
     this.y = y - BodyPart.size / 2
@@ -28,19 +28,24 @@ export class Player {
   draw() {
     ctx.fillStyle = 'blue'
     if (this.leftWrist) {
-      ctx.fillRect(this.leftWrist.x, this.leftWrist.y, this.width, this.height)
+      ctx.fillRect(
+        this.leftWrist.x,
+        this.leftWrist.y,
+        this.leftWrist.width,
+        this.leftWrist.height
+      )
     }
     if (this.rightWrist) {
       ctx.fillRect(
         this.rightWrist.x,
         this.rightWrist.y,
-        this.width,
-        this.height
+        this.rightWrist.width,
+        this.leftWrist.height
       )
     }
     if (this.nose) {
       ctx.fillStyle = this.isColliding ? 'orange' : 'blue'
-      ctx.fillRect(this.nose.x, this.nose.y, this.width, this.height)
+      ctx.fillRect(this.nose.x, this.nose.y, this.nose.width, this.nose.height)
     }
   }
 
