@@ -16,13 +16,16 @@ body {
     'Lucida Sans', Arial, sans-serif;
 }
 
-#startScreen {
+.game-screen {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
   z-index: 2;
+}
+
+#startScreen {
+  text-align: center;
 }
 
 #startScreen h1 {
@@ -96,12 +99,7 @@ body {
 }
 
 #gameControls {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 100;
 }
 
 #gameOverMessage,
