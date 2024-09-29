@@ -6,8 +6,8 @@ const ctx = canvas.getContext('2d')
 class BodyPart {
   static size = 50
   constructor({ x, y }) {
-    this.x = x - BodyPart.size / 2
-    this.y = y - BodyPart.size / 2
+    this.x = getNormalizedCanvasCoordinates(x - BodyPart.size / 2)
+    this.y = getNormalizedCanvasCoordinates(y - BodyPart.size / 2)
     this.width = BodyPart.size
     this.height = BodyPart.size
   }
