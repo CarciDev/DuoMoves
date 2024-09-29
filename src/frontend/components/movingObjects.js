@@ -33,7 +33,7 @@ export class MovingObject {
                     this.y += this.dy;
                     break;
                 case 'parabola':
-                    const intensity = 0.2;
+                    const intensity = 0.3;
                     this.y = this.startY - intensity * Math.pow(this.x - canvas.width / 2, 2);
                     this.x += this.dx;
                     break;
