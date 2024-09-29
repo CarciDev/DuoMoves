@@ -10,7 +10,7 @@ const ctx = canvas.getContext('2d')
 const gameHeader = document.querySelector('header')
 const timerDisplay = document.getElementById('timer')
 const gameOverMessage = document.getElementById('gameOverMessage')
-const winnerDisplay = document.getElementById('winner')
+const winnerMessage = document.getElementById('winnerMessage')
 
 const countdownDisplay = document.createElement('div')
 countdownDisplay.style.position = 'absolute'
@@ -48,11 +48,11 @@ function updateTimer() {
 
   if (timeLeft <= 0) {
     clearInterval(countdownInterval) // countdown stops
-    endGame(time)
+    endGame()
   }
 }
 
-export function endGame(reason) {
+export function endGame() {
   cancelAnimationFrame(gameInterval)
 
   timerDisplay.style.display = 'none'
@@ -62,17 +62,13 @@ export function endGame(reason) {
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  // if (reason === 'time') {
-  //     winnerDisplay.innerText = 'TIME UP!';
-  // } else {
-  //     if (p1Health > p2Health) {
-  //         winnerDisplay.innerText = 'PLAYER 1 WINS.';
-  //     } else if (p2Health > p1Health) {
-  //         winnerDisplay.innerText = 'PLAYER 2 WINS.';
-  //     } else {
-  //         winnerDisplay.innerText = 'DRAW';
-  //     }
-  // }
+  if (player1.health > player2.health) {
+    winnerMessage.innerText = 'PLAYER 1 WINS.'
+  } else if (player2.health > player1.health) {
+    winnerMessage.innerText = 'PLAYER 2 WINS.'
+  } else {
+    winnerMessage.innerText = 'DRAW'
+  }
 
   // setTimeout(() => {
   //     window.location.href = 'index.html';
