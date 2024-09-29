@@ -125,9 +125,9 @@ function createMovingObjects() {
     }
 }
 
-const player1 = new Player(0, canvas.height / 2 - 25, 50, 50, "player 1");
-let mouseX = player1.x;
-let mouseY = player1.y;
+const player1 = new Player();
+let mouseX = 1;
+let mouseY = 1;
 
 canvas.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
@@ -150,7 +150,8 @@ function animate() {
 
     try {
         let player1Detection = detections[0]
-        player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
+        player1.update(player1Detection);
+        // player1.update(player1Detection['nose'].x, player1Detection['nose'].y)
     } catch (e) {
         console.log("no detections")
     }
@@ -162,7 +163,7 @@ function animate() {
             if (obj.isEnemy){
                 obj.isColliding = true;
                 player1.isColliding = true;
-                player1.loseHealth();
+                player1.loseHealth(obj);
             }
             else {
                 player1.isColliding = true;

@@ -3,27 +3,36 @@ import { endGame } from "../script.js"
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext("2d");
 
-// todo make player class better with noses n stuff
 export class Player {
-    constructor(x, y, width, height, name) {
+
+    constructor(){
         this.health = 5; 
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.name = name;
-        this.isColliding = false; 
+        this.nose_x = null;
+        this.nose_y = null;
+        this.left_wrist_x = null;
+        this.left_wrist_y = null;
+        this.right_wrist_x = null;
+        this.right_wrist_y = null;
+        this.isColliding = false;
+        this.width = 50;
+        this.height = 50;
     }
 
     draw() {
-        ctx.fillStyle = this.isColliding ? 'orange' : 'green'; 
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(this.left_wrist_x, this.left_wrist_y, this,width, this.height);
+        ctx.fillRect(this.right_wrist_x, this.right_wrist_y, this,width, this.height);
+        ctx.fillStyle = this.isColliding ? 'orange' : 'blue'; 
+        ctx.fillRect(this.nose_x, this.nose_y, this,width, this.height);
     }
-
-    // todo update all body parts of the player
-    update(x, y) {
-        this.x = x - this.width / 2;
-        this.y = y - this.height / 2;
+    
+    update(player1Detection){
+        this.nose_x = player1Detection['nose'].x;
+        this.nose_y = player1Detection['nose'].y;
+        this.left_wrist_x = player1Detection['left_wrist'].x;
+        this.left_wrist_y = player1Detection['left_wrist'].y;
+        this.right_wrist_x = player1Detection['right_wrist'].x;
+        this.right_wrist_y = player1Detection['right_wrist'].y;
         this.draw();
     }
 
