@@ -71,7 +71,6 @@ export function endGame() {
     winnerMessage.innerText = 'PLAYER 1 WINS.'
   } else if (player2.health > player1.health) {
     winnerMessage.innerText = 'PLAYER 2 WINS.'
-    console.log("Here");
   } else {
     winnerMessage.innerText = 'DRAW'
   }
@@ -166,7 +165,9 @@ window.addEventListener('mousemove', (event) => {
     // const scaleY = canvas.height / rect.height
     // mouseX = (event.clientX - rect.left) * scaleX
     // mouseY = (event.clientY - rect.top) * scaleY
+    
   const { x, y } = getNormalizedCanvasCoordinates(event.clientX, event.clientY)
+  console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
   mouseX = x
   mouseY = y
 })
@@ -199,6 +200,11 @@ function animate() {
       player1.update(detectionB)
       player2.update(detectionA)
     }
+
+    console.log("player1 left wrist:", player1.leftWrist.x, player1.leftWrist.y);
+    console.log("player2 left wrist:", player2.leftWrist.x, player2.leftWrist.y);
+
+
   } catch (e) {
     player1.update({ nose: { x: mouseX, y: mouseY } })
   }
